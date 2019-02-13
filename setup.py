@@ -10,6 +10,10 @@ setup(name='repo2data',
       packages=['repo2data'],
       scripts=['bin/repo2data'],
       install_requires=[
+          'awscli',
+      #seg-fault with datalad
+          'datalad',
+          'wget',
       ],
       include_package_data=True,
       zip_safe=False)

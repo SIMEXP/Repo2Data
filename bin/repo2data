@@ -19,7 +19,7 @@ def get_parser():
 
     parser.add_argument(
             "-r"
-            , "--requirement_file"
+            , "--data_requirement"
             , required=False
             , default=None
             , help="Data requirement file, Default: current directory",
@@ -39,7 +39,7 @@ def get_parser():
 def main():
     args = get_parser().parse_args()
     repo2data = Repo2Data(**vars(args))
-    data2bids.run()
+    repo2data.install()
     
 if __name__ == '__main__':
     main()
