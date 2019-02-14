@@ -11,6 +11,7 @@ setup(name='repo2data',
       scripts=['bin/repo2data'],
       install_requires=[
           'awscli',
+          'patool',
       #seg-fault with datalad
           'datalad',
           'wget',
