@@ -48,24 +48,23 @@ Repo2Data will then automatically replace `_dst` by the one provided in the `dst
   "recursive": true}
 ```
 
-###### s3
-
-To download an amazon s3 link, just put it on the `src` field.
-
-```
-{ "src": "s3://openneuro.org/ds000005",
-  "dst": "/DATA",
-  "projectName": "repo2data_out",
-  "recursive": true}
-```
-
-
 ###### datalad
 
 If using datalad, it should be a `.git` file.
 
 ```
 { "src": "https://github.com/OpenNeuroDatasets/ds000005.git",
+  "dst": "/DATA",
+  "projectName": "repo2data_out",
+  "recursive": true}
+```
+
+###### s3
+
+To download an amazon s3 link, just put it on the `src` field.
+
+```
+{ "src": "s3://openneuro.org/ds000005",
   "dst": "/DATA",
   "projectName": "repo2data_out",
   "recursive": true}
