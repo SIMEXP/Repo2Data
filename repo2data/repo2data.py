@@ -9,6 +9,7 @@ import os
 import json
 import wget
 import subprocess
+import re
 import urllib
 import patoolib
 import datalad.api as datalad
@@ -49,8 +50,15 @@ class Repo2Data():
                                         , interactive=False)
                 print("Info : %s Decompressed" %(file))
             except patoolib.util.PatoolError:
-                print("Info : %s is not an archive or not compatible with patoolib \
-                      , bypassing decompression..." %(file))
+                # we want to print the list of available formt JUST if the file is indeed an archive
+                try:
+                    patoolib.get_archive_format(os.path.join(self._dst_path, file))
+                    print("Info : %s is not compatible with patoolib " \
+                          ", bypassing decompression..." %(file))
+                    list_formats = str(patoolib.list_formats())
+                    print("Info: available archive formats :" + list_formats)
+                except patoolib.util.PatoolError:
+                    pass
         
     def _already_downloaded(self):
         # The configuration file was saved if the data was correctly downloaded
@@ -65,32 +73,55 @@ class Repo2Data():
         
     def install(self):
         if not self._already_downloaded():
-            print("Info : Starting to download %s ..." %(self._data_requirement_file["src"]))
-            # Try it few times to avoid truncated data
-            attempts = 0
-            while attempts < 3:
-                #1. Download with standard weblink
+            # else, if it is an http link, then we use wget
+            if (re.match(".*?(https://).*?", self._data_requirement_file["src"])
+                and not re.match(".*?(\.git)", self._data_requirement_file["src"])):
+                print("Info : Starting to download with wget %s ..." %(self._data_requirement_file["src"]))
+                # Try it few times to avoid truncated data
+                attempts = 0
+                while attempts < 3:
+                    #1. Download with standard weblink
+                    try:
+                        wget.download(self._data_requirement_file["src"]
+                                     , out=self._dst_path)
+                        print(" ")
+                        attempts = 999
+                    except urllib.error.ContentTooShortError:
+                        attempts = attempts + 1
+                        print("Warning : Truncated data, retry %d ..." %(attempts))
+            # if the source link has a .git, we use datalad
+            elif re.match(".*?(\.git)", self._data_requirement_file["src"]):
+                print("Info : Starting to download from datalad %s ..." %(self._data_requirement_file["src"]))
                 try:
-                    wget.download(self._data_requirement_file["src"]
-                                 , out=self._dst_path)
-                    print(" ")
-                    attempts = 999
-                except urllib.error.ContentTooShortError:
-                    attempts = attempts + 1
-                    print("Warning : Truncated data, retry %d ..." %(attempts))
-            
-#            #2. Using datalad
-#            datalad.install(path=self._data_requirement_file["dst"]
-#                            ,source=self._data_requirement_file["src"]
-#                            ,get_data=True
-#                            ,recursive=self._data_requirement_file["recursive"])
-#            #3. With s3
-#            try:
-#                subprocess.check_call(['aws s3 sync --no-sign-request'
-#                                       , self._data_requirement_file["src"]
-#                                       , self._data_requirement_file["dst"]])
-#            except FileNotFoundError:
-#                print("aws does not appear to be installed")
+                    subprocess.check_call(['datalad install'
+                                           , "PATH"
+                                           , self._dst_path
+                                           , "-s"
+                                           , self._data_requirement_file["src"]])
+                except FileNotFoundError:
+                    print("Error: datalad does not appear to be installed")
+                    raise
+            #or maybe it is a python script
+            elif re.match(".*?(import.*?;).*?", self._data_requirement_file["src"]):
+                str_cmd = self._data_requirement_file["src"]
+                str_cmd = str_cmd.replace("_dst", "\"" + self._dst_path + "\"")
+                print("Info : Starting to download from python lib %s ..." %(self._data_requirement_file["src"]))
+                subprocess.check_call(["python3"
+                                       ,"-c"
+                                       , str_cmd])
+            # or a s3 link ?
+            elif re.match(".*?(s3://).*?", self._data_requirement_file["src"]):
+                print("Info : Starting to download from s3 %s ..." %(self._data_requirement_file["src"]))
+                try:
+                    subprocess.check_call(['aws'
+                                           , 's3'
+                                           , 'sync'
+                                           , '--no-sign-request'
+                                           , self._data_requirement_file["src"]
+                                           , self._dst_path])
+                except FileNotFoundError:
+                    print("Error: aws does not appear to be installed")
+                    raise
             
             # If needed, decompression of the data
             self._archive_decompress()
