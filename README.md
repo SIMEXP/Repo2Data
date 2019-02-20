@@ -19,7 +19,7 @@ The content of the server inside a folder.
 
 ###### Examples
 
-######## zip file
+###### archive file
 
 Repo2Data will use wget if he detects a http link.
 If the file is an archive, it will automatically decompress it using [patool](https://github.com/wummel/patool).
@@ -33,7 +33,7 @@ WARNING : Please unsure that you download the right package to unarchive the dat
   "recursive": true}
 ```
 
-######## library data-package
+###### library data-package
 
 You need to put the script to donwload the data in the `src` field. It should contain the import and you will need to install this library on the host machine.
 
@@ -51,7 +51,7 @@ Repo2Data will then automatically replace `_dst` by the one provided in the `dst
   "recursive": true}
 ```
 
-######## s3
+###### s3
 
 To download an amazon s3 link, just put it on the `src` field.
 
@@ -63,7 +63,7 @@ To download an amazon s3 link, just put it on the `src` field.
 ```
 
 
-######## datalad
+###### datalad
 
 If using datalad, it should be a `.git` file.
 
