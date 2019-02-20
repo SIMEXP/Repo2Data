@@ -80,7 +80,7 @@ If using datalad, it should be a `.git` file.
 
 ## Install
 
-#####With pip
+###### With pip
 `pip3 install repo2data`
 
 ## Usage
