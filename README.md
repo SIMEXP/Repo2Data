@@ -2,7 +2,7 @@
 Repo2Data is a **python3** package that automatically fecth data from a remote server, and decomrpess it if needed. Future development will fetch automatically 
  from [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/) for version control or specific python lib dataset (`tf.keras.datasets`, `nilearn.datasets.fetch` etc...).
  
-###### Input
+##### Input
  
 A `data_requirement.json` configuration file explaining what should be read, where should you store the data, a project name (folder) and if you want to download in a recursive way.
 
@@ -13,11 +13,11 @@ A `data_requirement.json` configuration file explaining what should be read, whe
   "recursive": true}
 ```
 
-###### Output
+##### Output
 
 The content of the server inside a folder.
 
-###### Examples
+##### Examples
 
 ###### archive file
 
@@ -35,14 +35,11 @@ WARNING : Please unsure that you download the right package to unarchive the dat
 
 ###### library data-package
 
-You need to put the script to donwload the data in the `src` field. It should contain the import and you will need to install this library on the host machine.
+You need to put the script to donwload the data in the `src` field. You will need to install the lib on the host machine and import it in the script.
 
-**It should contain** a parameter to provide the output directory, or Repo2Data can't control where the data will be stored. 
-
-Please replace the parameter for the output dir by `_dst`, for example write :
+The function to fetch the data needs a parameter to provide the output directory, or Repo2Data can't control where the data will be stored. Please replace the parameter for the output dir by `_dst`, for example write :
 `tf.keras.datasets.mnist.load_data(path=_dst)` instead of `tf.keras.datasets.mnist.load_data(path=/path/to/your/data)`
 Repo2Data will then automatically replace `_dst` by the one provided in the `dst` field
-
 
 ```
 { "src": "import tensroflow as tf; tf.keras.datasets.mnist.load_data(path=_dst)",
