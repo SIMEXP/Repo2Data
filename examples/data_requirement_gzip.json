@@ -1,4 +1,4 @@
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.tar.gz",
-  "dst": "/DATA",
-  "projectName": "repo2data_out",
+  "dst": "/home/ltetrel/Documents/data",
+  "projectName": "repo2data_gzip",
   "recursive": true}
