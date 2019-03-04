@@ -37,15 +37,21 @@ class Repo2Data():
         if isinstance(data_requirement, str) or data_requirement is None:
             self._set_data_requirement_path(data_requirement)
             
-    def run(self):
+    def install(self):
         print("---- repo2data starting ----")
         print(os.path.dirname(__file__))
-        print("\n Config from file :")
+        print("Config from file :")
         print(self._data_requirement_path)
         
-        for key, value in self._data_requirement_file.items():
-            if isinstance(value, dict):
-                Repo2DataChild(value, self._data_requirement_path).install()
+        #Here we check if the first item is a dict (mutiple requirement)
+        if isinstance(self._data_requirement_file[ next(iter(self._data_requirement_file)) ], dict):
+            for key, value in self._data_requirement_file.items():
+                if isinstance(value, dict):
+                    Repo2DataChild(value, self._data_requirement_path).install()
+        #if not, it is a single assignment
+        else:
+            Repo2DataChild(self._data_requirement_file, self._data_requirement_path).install()
+            
         
 class Repo2DataChild():
     def __init__(self, data_requirement_file=None, data_requirement_path=None):
@@ -157,9 +163,9 @@ class Repo2DataChild():
         return False
     
     def install(self):
-        print("\n Ouptut:")
+        print("Ouptut:")
         print(self._dst_path)
-        print("\n")
+        print()
         
         if not self._already_downloaded():
             # if it is an http link, then we use wget
@@ -192,6 +198,10 @@ class Repo2DataChild():
             print('Info : %s already downloaded' %(self._dst_path))
     
 if __name__ == '__main__':
+    
+    repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/examples/data_requirement_multiple.json")
+    repo2Data.install()
+    
     repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/examples/data_requirement_gzip.json")
     repo2Data.install()
     
