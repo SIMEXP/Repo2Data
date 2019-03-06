@@ -1,15 +1,14 @@
-{"hello": {
+{
   "inversion_recovery": {
     "src": "https://osf.io/ezv74/download/",
     "dst": "./",
-    "projectName": "ir_dataset",
+    "projectName": "repo2data_multiple1",
     "recursive": true
   },
   "vfa": {
     "src": "https://osf.io/wj6eg/download/",
     "dst": "./",
-    "projectName": "vfa_dataset",
+    "projectName": "repo2data_multiple2",
     "recursive": true
   }
-}
 }
