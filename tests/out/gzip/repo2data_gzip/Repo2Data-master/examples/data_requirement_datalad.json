@@ -1,0 +1,4 @@
+{ "src": "https://github.com/OpenNeuroDatasets/ds000005.git",
+  "dst": "./",
+  "projectName": "repo2data_datalad",
+  "recursive": true}

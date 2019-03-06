@@ -1,0 +1,4 @@
+{ "src": "s3://openneuro.org/ds001037",
+  "dst": "./tests/out/",
+  "projectName": "repo2data_s3",
+  "recursive": true}

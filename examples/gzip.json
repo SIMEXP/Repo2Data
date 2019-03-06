@@ -1,0 +1,4 @@
+{ "src": "https://github.com/SIMEXP/Repo2Data/archive/master.tar.gz",
+  "dst": "./",
+  "projectName": "repo2data_gzip",
+  "recursive": true}

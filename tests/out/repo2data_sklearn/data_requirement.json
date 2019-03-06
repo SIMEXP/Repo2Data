@@ -1,0 +1,1 @@
+{"src": "from sklearn import datasets; datasets.fetch_olivetti_faces(data_home=_dst);", "dst": "./tests/out/", "projectName": "repo2data_sklearn", "recursive": true}

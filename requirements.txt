@@ -1,0 +1,5 @@
+awscli==1.16.109
+patool==1.12
+datalad==0.11.3
+wget==1.19.4
+pytest=4.3.0

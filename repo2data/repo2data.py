@@ -199,14 +199,5 @@ class Repo2DataChild():
     
 if __name__ == '__main__':
     
-    repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/examples/data_requirement_multiple.json")
-    repo2Data.install()
-    
-    repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/examples/data_requirement_gzip.json")
-    repo2Data.install()
-    
-    repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/examples/data_requirement_datalad.json")
-    repo2Data.install()
-    
-    repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/examples/data_requirement_nilearn.json")
+    repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/tests/in/multiple.json")
     repo2Data.install()

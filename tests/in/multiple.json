@@ -1,0 +1,14 @@
+{
+  "authors": {
+    "src": "https://github.com/tensorflow/tensorflow/blob/master/AUTHORS",
+    "dst": "./tests/out/",
+    "projectName": "repo2data_multiple1",
+    "recursive": true
+  },
+  "license": {
+    "src": "https://github.com/tensorflow/tensorflow/blob/master/LICENSE",
+    "dst": "./tests/out/",
+    "projectName": "repo2data_multiple2",
+    "recursive": true
+  }
+}
