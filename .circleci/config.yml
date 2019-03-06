@@ -6,7 +6,8 @@ jobs:
       - image: python:3.6.8
     steps:
       - checkout
-      - run: pip install -r requirements.txt 
+      - run: pip install -r requirements.txt
+      - run: sudo apt-get install git-annex-standalone
       # cache the installed libraries
       - save_cache:
           key: pip-packages-v1-{{ .Branch }}-{{ checksum "requirements.txt" }} 
