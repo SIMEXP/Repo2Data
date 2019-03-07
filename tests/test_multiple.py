@@ -12,7 +12,7 @@ import os
 from repo2data.repo2data import Repo2Data
 
 class Test(unittest.TestCase):
-    def test_gzip(self):
+    def test_multiple(self):
         if os.path.exists("./tests/out/repo2data_multiple1"):
             shutil.rmtree("./tests/out/repo2data_multiple1")
         if os.path.exists("./tests/out/repo2data_multiple2"):
