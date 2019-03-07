@@ -15,6 +15,7 @@ jobs:
           paths:
             - "/usr/local/bin" 
             - "/usr/local/lib/python3.6/site-packages"
+      - run: which pytest
 
   test-sklearn:
     docker:
