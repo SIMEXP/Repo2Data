@@ -7,6 +7,8 @@ jobs:
     steps:
       - checkout
       - run: pip install -r requirements.txt
+      - run: apt-get install -y sudo
+      - run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
       - run: sudo apt-get install git-annex-standalone
       # cache the installed libraries
       - save_cache:
@@ -19,6 +21,7 @@ jobs:
     docker:
       - image: python:3.6.8
     steps:
+      - checkout
       # use the saved cache from the build to avoid reinstalling the libs
       - restore_cache:
           keys:
@@ -27,26 +30,12 @@ jobs:
       - run:
           name: sklearn
           command: pytest ./tests/test_sklearn.py
-  test-content:
-    docker:
-      - image: python:3.6.8
-    steps:
-      # use the saved cache from the build to avoid reinstalling the libs
-      - restore_cache:
-          keys:
-            - pip-packages-v1-{{ .Branch }}-{{ checksum "requirements.txt" }}
-      - run:
-          name: content
-          command: pytest ./tests/test_content.py
 
 workflows:
   version: 2
   tests:
     jobs:
       - build
-      - test-tree:
-          requires:
-            - build
-      - test-content:
+      - test-sklearn:
           requires:
             - build
