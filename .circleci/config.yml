@@ -6,6 +6,7 @@ jobs:
       - image: circleci/python:3.6.8 
     steps:
       - checkout
+      - run: cat /etc/os-release
       - run: sudo python -m pip install -r requirements.txt
         # installing git-annex-standalone https://git-annex.branchable.com/install/
         # following informations from http://neuro.debian.net/  
