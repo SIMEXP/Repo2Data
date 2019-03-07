@@ -6,7 +6,6 @@ jobs:
       - image: circleci/python:3.6.8 
     steps:
       - checkout
-      - run: sudo chown -R circleci /usr
       - run: pip install -r requirements.txt
       - run: sudo apt-get update
       - run: sudo apt-get install git-annex
