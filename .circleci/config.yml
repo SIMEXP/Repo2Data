@@ -21,7 +21,6 @@ jobs:
       - image: circleci/python:3.6.8
     steps:
       - checkout
-      - run: sudo python -m pip install sklearn
       # use the saved cache from the build to avoid reinstalling the libs
       - run: sudo chown -R circleci /usr
       - restore_cache:
