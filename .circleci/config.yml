@@ -22,6 +22,7 @@ jobs:
     steps:
       - checkout
       # use the saved cache from the build to avoid reinstalling the libs
+      - run: sudo chown -R circleci /usr
       - restore_cache:
           keys:
             - pip-packages-v1-{{ .Branch }}-{{ checksum "requirements.txt" }}
