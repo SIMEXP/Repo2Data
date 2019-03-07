@@ -3,3 +3,4 @@ patool
 datalad
 wget
 pytest
+data2bids
