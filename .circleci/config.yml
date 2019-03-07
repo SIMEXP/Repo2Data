@@ -6,7 +6,7 @@ jobs:
       - image: circleci/python:3.6.8 
     steps:
       - checkout
-      - run: pip install -r requirements.txt
+      - run: pip install -r --user requirements.txt
       - run: apt-get install -y sudo
       - run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
       - run: sudo apt-get install git-annex-standalone
