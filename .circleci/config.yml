@@ -6,6 +6,7 @@ jobs:
       - image: circleci/python:3.6.8 
     steps:
       - checkout
+      - run: sudo python -m pip install -r requirements.tx
       - run: sudo apt-get update  
         # installing git-annex-standalone https://git-annex.branchable.com/install/
         # following informations from http://neuro.debian.net/  
@@ -13,7 +14,6 @@ jobs:
       - run: sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9    
       - run: sudo apt-get update
       - run: sudo apt-get install git-annex-standalone
-      - run: sudo python -m pip install -r requirements.txt
         # cache the installed libraries
       - save_cache:
           key: pip-packages-v1-{{ epoch }}-{{ .Branch }}-{{ checksum "requirements.txt" }} 
