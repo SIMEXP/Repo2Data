@@ -38,7 +38,7 @@ jobs:
       # install git-annex-standalone https://git-annex.branchable.com/install/
       # following informations from http://neuro.debian.net/  
       - run: wget -O- http://neuro.debian.net/lists/stretch.us-nh.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-      - run: sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+      - run: sudo apt-key adv --recv-keys --keyserver hkp://p80.pool.sks-keyservers.net:80 0xA5D32F012649A5A9
       - run: sudo apt-get update
       - run: sudo apt-get install git-annex-standalone
       - run: sudo chown -R circleci /usr/local
