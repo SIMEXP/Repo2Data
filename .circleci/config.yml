@@ -15,10 +15,8 @@ jobs:
       - run: sudo apt-get install git-annex-standalone
         # cache the installed libraries
       - run: sudo python -m pip install -r requirements.txt
-      - run: which git-annex
-      - run: git-annex version
       - save_cache:
-          key: pip-packages-v9-{{ .Branch }}-{{ checksum "requirements.txt" }} 
+          key: pip-packages-v10-{{ .Branch }}-{{ checksum "requirements.txt" }} 
           paths:
             - "/usr/local/bin" 
             - "/usr/local/lib/python3.6/site-packages"
@@ -28,11 +26,11 @@ jobs:
       - image: circleci/python:3.6.8
     steps:
       - checkout
-      - run: sudo chown -R circleci /usr/local
+      - run: sudo chown -R circleci /usr
       # use the saved cache from the build to avoid reinstalling the libs
       - restore_cache:
           keys:
-            - pip-packages-v8-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-packages-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run: sudo python -m pip install sklearn
       - run:
           name: sklearn
@@ -43,11 +41,11 @@ jobs:
       - image: circleci/python:3.6.8
     steps:
       - checkout
-      - run: sudo chown -R circleci /usr/local
+      - run: sudo chown -R circleci /usr
       # use the saved cache from the build to avoid reinstalling the libs
       - restore_cache:
           keys:
-            - pip-packages-v9-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-packages-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run: which git-annex
       - run: git-annex version
       - run:
@@ -59,11 +57,11 @@ jobs:
       - image: circleci/python:3.6.8
     steps:
       - checkout
-      - run: sudo chown -R circleci /usr/local
+      - run: sudo chown -R circleci /usr
       # use the saved cache from the build to avoid reinstalling the libs
       - restore_cache:
           keys:
-            - pip-packages-v8-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-packages-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: gzip
           command: pytest ./tests/test_gzip.py
@@ -73,11 +71,11 @@ jobs:
       - image: circleci/python:3.6.8
     steps:
       - checkout
-      - run: sudo chown -R circleci /usr/local
+      - run: sudo chown -R circleci /usr
       # use the saved cache from the build to avoid reinstalling the libs
       - restore_cache:
           keys:
-            - pip-packages-v8-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-packages-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: multiple
           command: pytest ./tests/test_multiple.py
@@ -87,11 +85,11 @@ jobs:
       - image: circleci/python:3.6.8
     steps:
       - checkout
-      - run: sudo chown -R circleci /usr/local
+      - run: sudo chown -R circleci /usr
       # use the saved cache from the build to avoid reinstalling the libs
       - restore_cache:
           keys:
-            - pip-packages-v8-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-packages-v10-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: s3
           command: pytest ./tests/test_s3.py
