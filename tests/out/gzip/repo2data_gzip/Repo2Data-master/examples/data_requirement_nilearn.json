@@ -1,4 +1,0 @@
-{ "src": "import nilearn; from nilearn import datasets; datasets.fetch_adhd(n_subjects=1, data_dir=_dst);",
-  "dst": "./",
-  "projectName": "repo2data_nilearn",
-  "recursive": true}
