@@ -15,8 +15,10 @@ jobs:
       - run: sudo apt-get install git-annex-standalone
         # cache the installed libraries
       - run: sudo python -m pip install -r requirements.txt
+      - run: which git-annex
+      - run: git-annex version
       - save_cache:
-          key: pip-packages-v8-{{ .Branch }}-{{ checksum "requirements.txt" }} 
+          key: pip-packages-v9-{{ .Branch }}-{{ checksum "requirements.txt" }} 
           paths:
             - "/usr/local/bin" 
             - "/usr/local/lib/python3.6/site-packages"
@@ -45,7 +47,9 @@ jobs:
       # use the saved cache from the build to avoid reinstalling the libs
       - restore_cache:
           keys:
-            - pip-packages-v8-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            - pip-packages-v9-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      - run: which git-annex
+      - run: git-annex version
       - run:
           name: datalad
           command: pytest ./tests/test_datalad.py
