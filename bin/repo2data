@@ -24,6 +24,15 @@ def get_parser():
             , default=None
             , help="Data requirement file, Default: current directory",
             )
+    
+    parser.add_argument(
+            "--server"
+            , action="store_true"
+            , required=False
+            , default=False
+            , help="Disabling the dst option for the user, Default: False",
+            )
+
 
 #    parser.add_argument(
 #            "-l"

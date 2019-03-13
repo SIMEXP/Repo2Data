@@ -14,9 +14,10 @@ import urllib
 import patoolib
 
 class Repo2Data():
-    def __init__(self, data_requirement=None):
+    def __init__(self, data_requirement=None, server=False):
         self._data_requirement_path = None
         self._data_requirement_file = None
+        self._use_server = server
         
         self.load_data_requirement(data_requirement)
 
@@ -47,17 +48,19 @@ class Repo2Data():
         if isinstance(self._data_requirement_file[ next(iter(self._data_requirement_file)) ], dict):
             for key, value in self._data_requirement_file.items():
                 if isinstance(value, dict):
-                    Repo2DataChild(value, self._data_requirement_path).install()
+                    Repo2DataChild(value, self._data_requirement_path, self._use_server).install()
         #if not, it is a single assignment
         else:
-            Repo2DataChild(self._data_requirement_file, self._data_requirement_path).install()
+            Repo2DataChild(self._data_requirement_file, self._data_requirement_path, self._use_server).install()
             
         
 class Repo2DataChild():
-    def __init__(self, data_requirement_file=None, data_requirement_path=None):
+    def __init__(self, data_requirement_file=None, data_requirement_path=None, use_server=False):
         self._data_requirement_path = None
         self._data_requirement_file = None
         self._dst_path = None
+        self._use_server = use_server
+        self._server_dst_folder = "/DATA/"
         
         self.load_data_requirement(data_requirement_file)
         self._set_data_requirement_path(data_requirement_path)
@@ -78,8 +81,12 @@ class Repo2DataChild():
             print("Could not load json data.")
             raise
         
-        self._dst_path = os.path.join(self._data_requirement_file["dst"]
-                                    , self._data_requirement_file["projectName"])
+        if(self._use_server):
+            self._dst_path = os.path.join(self._server_dst_folder
+                                        , self._data_requirement_file["projectName"])
+        else:
+            self._dst_path = os.path.join(self._data_requirement_file["dst"]
+                                        , self._data_requirement_file["projectName"])
         
     def _archive_decompress(self):
         files = os.listdir(self._dst_path)
@@ -163,7 +170,7 @@ class Repo2DataChild():
         return False
     
     def install(self):
-        print("Ouptut:")
+        print("Destination:")
         print(self._dst_path)
         print()
         
