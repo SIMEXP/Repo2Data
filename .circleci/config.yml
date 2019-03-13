@@ -94,7 +94,7 @@ jobs:
           name: s3
           command: pytest ./tests/test_s3.py
 
-test-server:
+  test-server:
     docker:
       - image: circleci/python:3.6.8
     steps:
