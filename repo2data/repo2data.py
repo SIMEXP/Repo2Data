@@ -147,7 +147,7 @@ class Repo2DataChild():
             print("Error: datalad does not appear to be installed")
             raise
             
-    def _cmd_download(self):
+    def _lib_download(self):
         str_cmd = self._data_requirement_file["src"]
         str_cmd = str_cmd.replace("_dst", "\"" + self._dst_path + "\"")
         print("Info : Starting to download from python lib %s ..." %(self._data_requirement_file["src"]))
@@ -166,8 +166,20 @@ class Repo2DataChild():
             print("Error: aws does not appear to be installed")
             raise
     
-    def _scan_src(self):
-        return False
+    def _scan_dl_type(self):
+        # if it is an http link, then we use wget
+        if (re.match(".*?(https://).*?", self._data_requirement_file["src"])
+                and not re.match(".*?(\.git)", self._data_requirement_file["src"])):
+            self._wget_download()
+        # if the source link has a .git, we use datalad
+        elif re.match(".*?(\.git)", self._data_requirement_file["src"]):
+            self._datalad_download()
+        #or maybe it is a python script
+        elif re.match(".*?(import.*?;).*?", self._data_requirement_file["src"]):
+            self._lib_download()
+        # or a s3 link ?
+        elif re.match(".*?(s3://).*?", self._data_requirement_file["src"]):
+            self._s3_download()
     
     def install(self):
         print("Destination:")
@@ -175,22 +187,8 @@ class Repo2DataChild():
         print()
         
         if not self._already_downloaded():
-            # if it is an http link, then we use wget
-            if (re.match(".*?(https://).*?", self._data_requirement_file["src"])
-                and not re.match(".*?(\.git)", self._data_requirement_file["src"])):
-                self._wget_download()
-                
-            # if the source link has a .git, we use datalad
-            elif re.match(".*?(\.git)", self._data_requirement_file["src"]):
-                self._datalad_download()
-                
-            #or maybe it is a python script
-            elif re.match(".*?(import.*?;).*?", self._data_requirement_file["src"]):
-                self._cmd_download()
-                
-            # or a s3 link ?
-            elif re.match(".*?(s3://).*?", self._data_requirement_file["src"]):
-                self._s3_download()
+            # Downloading with the right method, depending on the src type
+            self._scan_dl_type()
             
             # If needed, decompression of the data
             self._archive_decompress()
