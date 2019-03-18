@@ -116,5 +116,3 @@ repo2data -r /path/to/data_requirement.json
 ```
 
 if you have the `data_requirement.json` on the current folder, you can just use use `repo2data` without any option.
-
-To disable the `dst` field in the requirement, please use the option `repo2data --server`
