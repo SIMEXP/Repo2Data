@@ -1,13 +1,13 @@
 {
-  "inversion_recovery": {
-    "src": "https://osf.io/ezv74/download/",
-    "dst": "./",
+  "authors": {
+    "src": "https://github.com/tensorflow/tensorflow/blob/master/AUTHORS",
+    "dst": "/DATA",
     "projectName": "repo2data_multiple1",
     "recursive": true
   },
-  "vfa": {
-    "src": "https://osf.io/wj6eg/download/",
-    "dst": "./",
+  "license": {
+    "src": "https://github.com/tensorflow/tensorflow/blob/master/LICENSE",
+    "dst": "/DATA",
     "projectName": "repo2data_multiple2",
     "recursive": true
   }
