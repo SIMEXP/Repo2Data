@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='repo2data',
-      version='1.1',
+      version='1.2',
       description='Automatic data fetcher from a remote server.',
       url='https://github.com/SIMEXP/Repo2Data',
       author='Loic TETREL',
