@@ -100,9 +100,18 @@ You can disable the field `dst` (in case you are uploading to a server for examp
 ## Dependencies
   
 * awscli  
-* datalad
+* datalad*
 * patool
 * wget
+* pytest
+
+(\*) To run Datalad, you will also need to install the latest version of [git-annex](https://git-annex.branchable.com/install/).
+To install the latest version, please use the [package from neuro-debian](https://git-annex.branchable.com/install/) :
+```
+wget -O- http://neuro.debian.net/lists/stretch.us-nh.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
+sudo apt-key adv --recv-keys --keyserver hkp://ipv4.pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+```
+If you have troubles to download the key, please look at this [issue](https://github.com/jacobalberty/unifi-docker/issues/64).
 
 ## Install
 
