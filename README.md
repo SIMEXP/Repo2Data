@@ -1,5 +1,5 @@
 [![CircleCI](https://circleci.com/gh/SIMEXP/Repo2Data.svg?style=svg)](https://circleci.com/gh/SIMEXP/Repo2Data)
-# Repo2Data
+# Repo2Data 1.2
 Repo2Data is a **python3** package that automatically fecth data from a remote server, and decomrpess it if needed. Future development will fetch automatically 
  from [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/) for version control or specific python lib dataset (`tf.keras.datasets`, `nilearn.datasets.fetch` etc...).
  
@@ -71,6 +71,32 @@ To download an amazon s3 link, just put it on the `src` field.
   "recursive": true}
 ```
 
+###### multiple data
+
+If you need to download many data at once, you can create a list of json. For example, to download different files from a repo :
+
+```
+{
+  "authors": {
+    "src": "https://github.com/tensorflow/tensorflow/blob/master/AUTHORS",
+    "dst": "/DATA",
+    "projectName": "repo2data_multiple1",
+    "recursive": true
+  },
+  "license": {
+    "src": "https://github.com/tensorflow/tensorflow/blob/master/LICENSE",
+    "dst": "/DATA",
+    "projectName": "repo2data_multiple2",
+    "recursive": true
+  }
+}
+```
+
+###### disabling `dst` field
+
+You can disable the field `dst` (in case you are uploading to a server for example) by using the option
+`repo2data --server`
+
 ## Dependencies
   
 * awscli  
@@ -90,3 +116,5 @@ repo2data -r /path/to/data_requirement.json
 ```
 
 if you have the `data_requirement.json` on the current folder, you can just use use `repo2data` without any option.
+
+To disable the `dst` field in the requirement, please use the option `repo2data --server`
