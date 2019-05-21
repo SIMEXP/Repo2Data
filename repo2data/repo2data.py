@@ -96,6 +96,9 @@ class Repo2DataChild():
                                         , outdir=self._dst_path
                                         , verbosity=-1
                                         , interactive=False)
+                # now we can safely delete the archive
+                if os.path.exists(os.path.join(self._dst_path, file)):
+                    os.remove(os.path.join(self._dst_path, file))
                 print("Info : %s Decompressed" %(file))
             except patoolib.util.PatoolError:
                 # we want to print the list of available formt JUST if the file is indeed an archive
