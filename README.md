@@ -94,8 +94,10 @@ If you need to download many data at once, you can create a list of json. For ex
 
 ###### disabling `dst` field
 
-You can disable the field `dst` (in case you are uploading to a server for example) by using the option
+You can disable the field `dst` by using the option
 `repo2data --server`
+
+In this case Repo2Data will put the data from where it is run. This is usefull if you want to have full control over the destination (you are a server admin and don't want your users to control the destination).
 
 ## Dependencies
   
