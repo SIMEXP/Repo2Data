@@ -60,7 +60,7 @@ class Repo2DataChild():
         self._data_requirement_file = None
         self._dst_path = None
         self._use_server = use_server
-        self._server_dst_folder = "/DATA/"
+        self._server_dst_folder = "./data"
         
         self.load_data_requirement(data_requirement_file)
         self._set_data_requirement_path(data_requirement_path)
