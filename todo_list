@@ -1,2 +1,0 @@
-* Add google doc support
-* For multi requirements data, should be multithreaded (not multiprocesses since I/O bounded)
