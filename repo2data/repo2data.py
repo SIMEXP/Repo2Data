@@ -115,7 +115,7 @@ class Repo2DataChild():
         # The configuration file was saved if the data was correctly downloaded
         if not os.path.exists( os.path.join(self._dst_path, "data_requirement.json")):
             if not os.path.exists(self._dst_path):
-                os.mkdir(self._dst_path)
+                os.makedirs(self._dst_path)
             dl = False
         else:
             dl = True
