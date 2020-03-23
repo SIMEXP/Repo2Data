@@ -37,6 +37,6 @@ RUN python3 -m pip install -e /Repo2Data -r requirements.txt
 
 #data folder for repo2data
 RUN mkdir /data
-WORKDIR /data
+WORKDIR /
 
-CMD ["repo2data"]
+ENTRYPOINT ["repo2data", "-r", "/data/*.json", "--server"]
