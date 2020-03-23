@@ -204,8 +204,3 @@ class Repo2DataChild():
             
         else:
             print('Info : %s already downloaded' %(self._dst_path))
-    
-if __name__ == '__main__':
-    
-    repo2Data = Repo2Data("/home/ltetrel/Documents/work/Repo2Data/tests/in/multiple.json")
-    repo2Data.install()
