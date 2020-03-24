@@ -33,4 +33,5 @@ RUN python3 -m pip install --upgrade pip && python3 -m pip install --no-cache \
 RUN mkdir /data
 WORKDIR /
 
-ENTRYPOINT ["repo2data", "-r", "/data/data_requirement.json", "--server"]
+ENTRYPOINT ["repo2data", "--server"]
+CMD ["-r", "/data/data_requirement.json"]

@@ -1,79 +1,69 @@
 [![CircleCI](https://circleci.com/gh/SIMEXP/Repo2Data.svg?style=svg)](https://circleci.com/gh/SIMEXP/Repo2Data)
 # Repo2Data 2.1
-Repo2Data is a **python3** package that automatically fecth data from a remote server, and decomrpess it if needed. Future development will fetch automatically 
- from [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/) for version control or specific python lib dataset (`tf.keras.datasets`, `nilearn.datasets.fetch` etc...).
+Repo2Data is a **python3** package that automatically fecth data from a remote server, and decompress it if needed. Supported web data sources are [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/), raw http or specific python lib datasets (`sklearn.datasets.load`, `nilearn.datasets.fetch` etc...).
  
-##### Input
+## Input
  
-A `data_requirement.json` configuration file explaining what should be read, where should you store the data, a project name (folder) and if you want to download in a recursive way.
+A `data_requirement.json` configuration file explaining what should be read, where should you store the data, a folder name and if you want to download in a recursive way.
 
 ```
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.zip",
-  "dst": "/DATA",
+  "dst": "/data",
   "projectName": "repo2data_out",
   "recursive": true}
 ```
+## Output
 
-##### Output
+The content of the server inside the specified folder.
 
-The content of the server inside a folder.
-
-##### Github repo as input
-
-If there is a https github repository with `/binder/data_requirement.json` at its root, you can call the underlying `data_requirement` file with:
-`repo2data -r GITHUB_REPO`
-
-An example of a valid `GITHUB_REPO` is: `/https://github.com/ltetrel/repo2data-caching-s3`
-
-##### Examples
+### Examples of data_requirement.json
 
 ###### archive file
 
-Repo2Data will use wget if he detects a http link.
-If the file is an archive, it will automatically decompress it using [patool](https://github.com/wummel/patool).
-
-WARNING : Please unsure that you download the right package to unarchive the data (ex: `/usr/bin/pigz` for `.tar.gz` which should be installed by default on ubuntu).
+Repo2Data will use `wget` if it detects a http link.
+If this file is an archive, it will be automatically be decompressed using [patool](https://github.com/wummel/patool). Please unsure that you download the right package to unarchive the data (ex: `/usr/bin/tar` for `.tar.gz`).
 
 ```
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.tar.gz",
-  "dst": "/DATA",
+  "dst": "/data",
   "projectName": "repo2data_out",
   "recursive": true}
 ```
 
 ###### library data-package
 
-You need to put the script to donwload the data in the `src` field. You will need to install the lib on the host machine and import it in the script.
+You will need to put the script to import and download the data in the `src` field, the lib should be installed on the host machine.
 
-The function to fetch the data needs a parameter to provide the output directory, or Repo2Data can't control where the data will be stored. Please replace the parameter for the output dir by `_dst`, for example write :
-`tf.keras.datasets.mnist.load_data(path=_dst)` instead of `tf.keras.datasets.mnist.load_data(path=/path/to/your/data)`
-Repo2Data will then automatically replace `_dst` by the one provided in the `dst` field
+Any lib function to fetch data needs a parameter so it know where is the output directory. To avoid dupplication of the destination parameter, please replace the parameter for the output dir in the function by `_dst`.
+
+For example write `tf.keras.datasets.mnist.load_data(path=_dst)` instead of `tf.keras.datasets.mnist.load_data(path=/path/to/your/data)`.
+Repo2Data will then automatically replace `_dst` by the one provided in the `dst` field.
 
 ```
 { "src": "import tensroflow as tf; tf.keras.datasets.mnist.load_data(path=_dst)",
-  "dst": "/DATA",
+  "dst": "/data",
   "projectName": "repo2data_out",
   "recursive": true}
 ```
 
 ###### datalad
 
-If using datalad, it should be a `.git` file.
+The `src` should be point to a `.git` link if using `datalad`, `Repo2Data` will then just call `datalad get`.
 
 ```
 { "src": "https://github.com/OpenNeuroDatasets/ds000005.git",
-  "dst": "/DATA",
+  "dst": "/data",
   "projectName": "repo2data_out",
   "recursive": true}
 ```
 
 ###### s3
 
-To download an amazon s3 link, just put it on the `src` field.
+To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` command. So you should provide the `s3://` bucket link of the data:
 
 ```
 { "src": "s3://openneuro.org/ds000005",
-  "dst": "/DATA",
+  "dst": "/data",
   "projectName": "repo2data_out",
   "recursive": true}
 ```
@@ -86,51 +76,95 @@ If you need to download many data at once, you can create a list of json. For ex
 {
   "authors": {
     "src": "https://github.com/tensorflow/tensorflow/blob/master/AUTHORS",
-    "dst": "/DATA",
+    "dst": "/data",
     "projectName": "repo2data_multiple1",
     "recursive": true
   },
   "license": {
     "src": "https://github.com/tensorflow/tensorflow/blob/master/LICENSE",
-    "dst": "/DATA",
+    "dst": "/data",
     "projectName": "repo2data_multiple2",
     "recursive": true
   }
 }
 ```
+## Install
 
-###### disabling `dst` field
+### Docker (recommended)
 
-You can disable the field `dst` by using the option
-`repo2data --server`
+This is the recommended way of using `Repo2Data`, because it encapsulate all the dependencies inside the container. It also features `scikit-learn` and `nilearn` to pull data from.
 
-In this case Repo2Data will put the data from where it is run. This is usefull if you want to have full control over the destination (you are a server admin and don't want your users to control the destination).
+Clone this repo and build the docker image yourself :
+```
+git clone https://github.com/SIMEXP/Repo2Data
+sudo docker build --tag repo2data ./Repo2Data/
+```
 
-## Dependencies
-  
-* awscli  
-* datalad*
-* patool
-* wget
-* pytest
+### pip
 
-(\*) To run Datalad, you will also need to install the latest version of [git-annex](https://git-annex.branchable.com/install/).
-To install the latest version, please use the [package from neuro-debian](https://git-annex.branchable.com/install/) :
+To install `Datalad` you will need the latest version of [git-annex](https://git-annex.branchable.com/install/), please use the [package from neuro-debian](https://git-annex.branchable.com/install/) :
 ```
 wget -O- http://neuro.debian.net/lists/stretch.us-nh.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
 sudo apt-key adv --recv-keys --keyserver hkp://ipv4.pool.sks-keyservers.net:80 0xA5D32F012649A5A9
 ```
 If you have troubles to download the key, please look at this [issue](https://github.com/jacobalberty/unifi-docker/issues/64).
 
-## Install
+You can now install with `pip`:
+```
+python3 -m pip install repo2data
+```
 
-###### With pip
-`pip3 install repo2data`
+## Dependencies
+  
+* awscli==1.16.163
+* patool==1.12
+* datalad==0.12.4 (see pip install section)
+* wget==3.2
+* pytest==4.4.0
 
 ## Usage
 
+After creating the `data_requirement.json`, just use `repo2data` without any option:
 ```
-repo2data -r /path/to/data_requirement.json
+repo2data
 ```
 
-if you have the `data_requirement.json` on the current folder, you can just use use `repo2data` without any option.
+### requirements in another directory
+
+If the `data_requirement.json` is in another directory, use the `-r` option:
+```
+repo2data -r /PATH/TO/data_requirement.json
+```
+
+### github repo url as input
+
+Given a https github repository with a `/binder/data_requirement.json` at its root, you can call the underlying `data_requirement` file with:
+```
+repo2data -r GITHUB_REPO
+```
+
+An example of a valid `GITHUB_REPO` is: https://github.com/ltetrel/repo2data-caching-s3
+
+### disabling `dst` field
+
+You can disable the field `dst` by using the option
+`repo2data --server`
+
+In this case `Repo2Data` will put the data inside the folder `./data` from where it is run. This is usefull if you want to have full control over the destination (you are a server admin and don't want your users to control the destination).
+
+### Docker
+
+You will need to create a folder on your machine (containing a `data_requirement.json`) that the Docker container will access, so `Repo2Data` can pull the data inside it, after you can use:
+```
+sudo docker run -v /PATH/TO/FOLDER:/data repo2data
+```
+
+(the container will run with `--server` enabled, so all the data in the container will be at `/data`)
+
+A requirement from a github repo is also supported (so you don't need any `data_requirement.json` inside your host folder):
+```
+sudo docker run -v /PATH/TO/FOLDER:/data repo2data -r GITHUB_REPO
+```
+
+`Docker` mounts the host (your machine) folder into the container folder as `-v host_folder:container_folder`, so don't override `:/data`.
+
