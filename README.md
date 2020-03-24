@@ -70,7 +70,7 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
 
 ###### multiple data
 
-If you need to download many data at once, you can create a list of json. For example, to download different files from a repo :
+If you need to download many data at once, you can create a list of json. For example, to download different files from a repo:
 
 ```
 {
