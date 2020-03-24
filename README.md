@@ -129,7 +129,7 @@ After creating the `data_requirement.json`, just use `repo2data` without any opt
 repo2data
 ```
 
-### requirements in another directory
+### requirement in another directory
 
 If the `data_requirement.json` is in another directory, use the `-r` option:
 ```
@@ -154,7 +154,7 @@ In this case `Repo2Data` will put the data inside the folder `./data` from where
 
 ### Docker
 
-You will need to create a folder on your machine (containing a `data_requirement.json`) that the Docker container will access, so `Repo2Data` can pull the data inside it, after you can use:
+You will need to create a folder on your machine (containing a `data_requirement.json`) that the Docker container will access so `Repo2Data` can pull the data inside it, after you can use:
 ```
 sudo docker run -v /PATH/TO/FOLDER:/data repo2data
 ```
