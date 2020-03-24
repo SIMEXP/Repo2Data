@@ -11,6 +11,7 @@ import wget
 import subprocess
 import re
 import urllib
+import urllib.request
 import patoolib
 
 class Repo2Data():
@@ -48,28 +49,20 @@ class Repo2Data():
         if isinstance(self._data_requirement_file[ next(iter(self._data_requirement_file)) ], dict):
             for key, value in self._data_requirement_file.items():
                 if isinstance(value, dict):
-                    Repo2DataChild(value, self._data_requirement_path, self._use_server).install()
+                    Repo2DataChild(value, self._use_server).install()
         #if not, it is a single assignment
         else:
-            Repo2DataChild(self._data_requirement_file, self._data_requirement_path, self._use_server).install()
+            Repo2DataChild(self._data_requirement_file, self._use_server).install()
             
         
 class Repo2DataChild():
-    def __init__(self, data_requirement_file=None, data_requirement_path=None, use_server=False):
-        self._data_requirement_path = None
+    def __init__(self, data_requirement_file=None, use_server=False):
         self._data_requirement_file = None
         self._dst_path = None
         self._use_server = use_server
         self._server_dst_folder = "./data"
         
         self.load_data_requirement(data_requirement_file)
-        self._set_data_requirement_path(data_requirement_path)
-
-    def get_data_requirement_path(self):
-        return self._data_requirement_path
-
-    def _set_data_requirement_path(self, data_requirement_path):
-        self._data_requirement_path = data_requirement_path
 
     def load_data_requirement(self, data_requirement_file):
         # here we should load just a json data
