@@ -31,8 +31,15 @@ class Repo2Data():
         self._update_data_requirement_file()
         
     def _update_data_requirement_file(self):
-        with open(self._data_requirement_path, 'r') as fst:
-            self._data_requirement_file = json.load(fst)
+        # if the request fails, then the requirement_path is probably a path
+        try:
+            orga_repo = re.match(".*?github\.com(/.*/.*)", self._data_requirement_path)[1]
+            raw_url = "https://raw.githubusercontent.com%s/master/binder/data_requirement.json" %(orga_repo)
+            with urllib.request.urlopen(raw_url) as url:
+                self._data_requirement_file = json.loads(url.read().decode())
+        except:
+            with open(self._data_requirement_path, 'r') as fst:
+                self._data_requirement_file = json.load(fst)
         
     def load_data_requirement(self, data_requirement):
         # we try if data_requirement is a str

@@ -22,7 +22,7 @@ def get_parser():
             , "--data_requirement"
             , required=False
             , default=None
-            , help="Data requirement file, Default: current directory",
+            , help="Data requirement file (can be a https://github repo), Default: current directory",
             )
     
     parser.add_argument(

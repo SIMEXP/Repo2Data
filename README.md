@@ -18,6 +18,13 @@ A `data_requirement.json` configuration file explaining what should be read, whe
 
 The content of the server inside a folder.
 
+##### Github repo as input
+
+If there is a https github repository with `/binder/data_requirement.json` at its root, you can call the underlying `data_requirement` file with:
+`repo2data -r GITHUB_REPO`
+
+An example of a valid `GITHUB_REPO` is: `/https://github.com/ltetrel/repo2data-caching-s3`
+
 ##### Examples
 
 ###### archive file
