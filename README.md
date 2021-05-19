@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/SIMEXP/Repo2Data.svg?style=svg)](https://circleci.com/gh/SIMEXP/Repo2Data) [![PyPI version](https://badge.fury.io/py/repo2data.svg)](https://badge.fury.io/py/repo2data) [![Python 3.6](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360/) ![GitHub](https://img.shields.io/github/license/SIMEXP/repo2data)
 # Repo2Data
-Repo2Data is a **python3** package that automatically fecth data from a remote server, and decompress it if needed. Supported web data sources are [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/), raw http or specific python lib datasets (`sklearn.datasets.load`, `nilearn.datasets.fetch` etc...).
+Repo2Data is a **python3** package that automatically fecth data from a remote server, and decompress it if needed. Supported web data sources are [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/), [osf](https://osf.io/), raw http or specific python lib datasets (`sklearn.datasets.load`, `nilearn.datasets.fetch` etc...).
  
 ## Input
  
@@ -70,7 +70,7 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
 
 ###### osf
 
-`Repo2Data` uses [osclient](https://github.com/osfclient/osfclient) `osf -p PROJECT_ID clone` command, and you need to give the link to your project containing your data `https://osf.io/.../`:
+`Repo2Data` uses [osclient](https://github.com/osfclient/osfclient) `osf -p PROJECT_ID clone` command. You will need to give the link to your project containing your data `https://osf.io/.../`:
 
 ```
 { "src": "https://osf.io/fuqsk/",
