@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/SIMEXP/Repo2Data.svg?style=svg)](https://circleci.com/gh/SIMEXP/Repo2Data) [![PyPI version](https://badge.fury.io/py/repo2data.svg)](https://badge.fury.io/py/repo2data) [![Python 3.6](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360/) ![GitHub](https://img.shields.io/github/license/SIMEXP/repo2data)
 # Repo2Data
-Repo2Data is a **python3** package that automatically fecth data from a remote server, and decompress it if needed. Supported web data sources are [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/), [osf](https://osf.io/), raw http or specific python lib datasets (`sklearn.datasets.load`, `nilearn.datasets.fetch` etc...).
+Repo2Data is a **python3** package that automatically fecth data from a remote server, and decompress it if needed. Supported web data sources are [amazon s3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html), [datalad](https://www.datalad.org/), [osf](https://osf.io/), raw http(s) or specific python lib datasets (`sklearn.datasets.load`, `nilearn.datasets.fetch` etc...).
  
 ## Input
  
