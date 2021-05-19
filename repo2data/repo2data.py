@@ -127,7 +127,7 @@ class Repo2DataChild():
         # Try it few times to avoid truncated data
         attempts = 0
         while attempts < 3:
-            #1. Download with standard weblink
+            #Download with standard weblink
             try:
                 wget.download(self._data_requirement_file["src"]
                              , out=self._dst_path)
@@ -168,11 +168,26 @@ class Repo2DataChild():
         except FileNotFoundError:
             print("Error: aws does not appear to be installed")
             raise
+
+    def _osf_download(self):
+        print("Info : Starting to download from osf {} ...".format(self._data_requirement_file["src"]))
+        try:
+            project_id = re.match("https://osf.io/(.{5})", self._data_requirement_file["src"])[1]
+            subprocess.check_call(['osf'
+                                   , '--project'
+                                   , project_id
+                                   , 'clone'
+                                   , self._dst_path])
+        except FileNotFoundError:
+            print("Error: osf does not appear to be installed")
+            raise
     
     def _scan_dl_type(self):
         # if it is an http link, then we use wget
-        if (re.match(".*?(https://).*?", self._data_requirement_file["src"])
-                and not re.match(".*?(\.git)", self._data_requirement_file["src"])):
+        if ((re.match(".*?(https://).*?", self._data_requirement_file["src"])
+                or re.match(".*?(http://).*?", self._data_requirement_file["src"]))
+                and not re.match(".*?(\.git)", self._data_requirement_file["src"])
+                and not re.match(".*?(https://osf.io).*?", self._data_requirement_file["src"])):
             self._wget_download()
         # if the source link has a .git, we use datalad
         elif re.match(".*?(\.git)", self._data_requirement_file["src"]):
@@ -183,6 +198,9 @@ class Repo2DataChild():
         # or a s3 link ?
         elif re.match(".*?(s3://).*?", self._data_requirement_file["src"]):
             self._s3_download()
+        # or osf
+        elif re.match(".*?(https://osf.io).*?", self._data_requirement_file["src"]):
+            self._osf_download()
     
     def install(self):
         print("Destination:")
