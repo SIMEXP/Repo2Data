@@ -8,7 +8,7 @@ A `data_requirement.json` configuration file explaining what should be read, whe
 
 ```
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.zip",
-  "dst": "/data",
+  "dst": "./data",
   "projectName": "repo2data_out",
   "recursive": true}
 ```
@@ -25,8 +25,8 @@ If this file is an archive, it will be automatically be decompressed using [pato
 
 ```
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.tar.gz",
-  "dst": "/data",
-  "projectName": "repo2data_out",
+  "dst": "./data",
+  "projectName": "repo2data_wget",
   "recursive": true}
 ```
 
@@ -41,8 +41,8 @@ Repo2Data will then automatically replace `_dst` by the one provided in the `dst
 
 ```
 { "src": "import tensroflow as tf; tf.keras.datasets.mnist.load_data(path=_dst)",
-  "dst": "/data",
-  "projectName": "repo2data_out",
+  "dst": "./data",
+  "projectName": "repo2data_lib",
   "recursive": true}
 ```
 
@@ -52,8 +52,8 @@ The `src` should be point to a `.git` link if using `datalad`, `Repo2Data` will 
 
 ```
 { "src": "https://github.com/OpenNeuroDatasets/ds000005.git",
-  "dst": "/data",
-  "projectName": "repo2data_out",
+  "dst": "./data",
+  "projectName": "repo2data_datalad",
   "recursive": true}
 ```
 
@@ -63,26 +63,37 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
 
 ```
 { "src": "s3://openneuro.org/ds000005",
-  "dst": "/data",
-  "projectName": "repo2data_out",
+  "dst": "./data",
+  "projectName": "repo2data_s3",
+  "recursive": true}
+```
+
+###### osf
+
+`Repo2Data` uses [osclient](https://github.com/osfclient/osfclient) `osf -p PROJECT_ID clone` command, and you need to give the link to your project containing your data `https://osf.io/.../`:
+
+```
+{ "src": "https://osf.io/fuqsk/",
+  "dst": "./data",
+  "projectName": "repo2data_osf",
   "recursive": true}
 ```
 
 ###### multiple data
 
-If you need to download many data at once, you can create a list of json. For example, to download different files from a repo:
+If you need to download many data at once, you can create a list of json. For example, to download different files from a repo :
 
 ```
 {
   "authors": {
     "src": "https://github.com/tensorflow/tensorflow/blob/master/AUTHORS",
-    "dst": "/data",
+    "dst": "./data",
     "projectName": "repo2data_multiple1",
     "recursive": true
   },
   "license": {
     "src": "https://github.com/tensorflow/tensorflow/blob/master/LICENSE",
-    "dst": "/data",
+    "dst": "./data",
     "projectName": "repo2data_multiple2",
     "recursive": true
   }
