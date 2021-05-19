@@ -16,6 +16,7 @@ setup(name='repo2data',
       #seg-fault with datalad
           'datalad',
           'wget',
+          'osfclient',
       ],
       include_package_data=True,
       zip_safe=False)
