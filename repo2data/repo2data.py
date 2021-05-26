@@ -47,7 +47,7 @@ class Repo2Data():
                 except:
                     raise Exception("{} does not contain a data_requirement.json file!".format(self._data_requirement_path))
         # else if it is indeed a req file
-        elif re.match(".*?data_requirement\\.json", self._data_requirement_path):
+        elif re.match(".*?\\.json", self._data_requirement_path):
             with open(self._data_requirement_path, 'r') as fst:
                 self._data_requirement_file = json.load(fst)
         else:
