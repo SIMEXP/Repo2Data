@@ -31,15 +31,27 @@ class Repo2Data():
         self._update_data_requirement_file()
         
     def _update_data_requirement_file(self):
-        # if the request fails, then the requirement_path is probably a path
-        try:
-            orga_repo = re.match(".*?github\.com(/.*/.*)", self._data_requirement_path)[1]
-            raw_url = "https://raw.githubusercontent.com%s/master/binder/data_requirement.json" %(orga_repo)
-            with urllib.request.urlopen(raw_url) as url:
-                self._data_requirement_file = json.loads(url.read().decode())
-        except:
+        # Check if data_requirement is a github link
+        if re.match(".*?(github\\.com).*?", self._data_requirement_path):
+            try:
+                orga_repo = re.match(".*?github\\.com(/.*/.*)", self._data_requirement_path)[1]
+                raw_url = "https://raw.githubusercontent.com%s/HEAD/data_requirement.json" %(orga_repo)
+                with urllib.request.urlopen(raw_url) as url:
+                    self._data_requirement_file = json.loads(url.read().decode())
+            # if requirement file is not in root repo, we check under binder directory
+            except:
+                try:
+                    raw_url = "https://raw.githubusercontent.com%s/HEAD/binder/data_requirement.json" %(orga_repo)
+                    with urllib.request.urlopen(raw_url) as url:
+                        self._data_requirement_file = json.loads(url.read().decode())
+                except:
+                    raise Exception("{} does not contain a data_requirement.json file!".format(self._data_requirement_path))
+        # else if it is indeed a req file
+        elif re.match(".*?data_requirement\\.json", self._data_requirement_path):
             with open(self._data_requirement_path, 'r') as fst:
                 self._data_requirement_file = json.load(fst)
+        else:
+            raise Exception("{} is neither a valid url or filepath!".format(self._data_requirement_path))
         
     def load_data_requirement(self, data_requirement):
         # we try if data_requirement is a str
@@ -186,11 +198,11 @@ class Repo2DataChild():
         # if it is an http link, then we use wget
         if ((re.match(".*?(https://).*?", self._data_requirement_file["src"])
                 or re.match(".*?(http://).*?", self._data_requirement_file["src"]))
-                and not re.match(".*?(\.git)", self._data_requirement_file["src"])
+                and not re.match(".*?(\\.git)", self._data_requirement_file["src"])
                 and not re.match(".*?(https://osf.io).*?", self._data_requirement_file["src"])):
             self._wget_download()
         # if the source link has a .git, we use datalad
-        elif re.match(".*?(\.git)", self._data_requirement_file["src"]):
+        elif re.match(".*?(\\.git)", self._data_requirement_file["src"]):
             self._datalad_download()
         #or maybe it is a python script
         elif re.match(".*?(import.*?;).*?", self._data_requirement_file["src"]):

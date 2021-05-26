@@ -149,7 +149,7 @@ repo2data -r /PATH/TO/data_requirement.json
 
 ### github repo url as input
 
-Given a https github repository with a `/binder/data_requirement.json` at its root, you can call the underlying `data_requirement` file with:
+Given a valid https github repository with a `data_requirement.json` at `HEAD` branch (under a `binder` directory or at its root), you can do:
 ```
 repo2data -r GITHUB_REPO
 ```
