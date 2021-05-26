@@ -124,13 +124,18 @@ class Repo2DataChild():
                     pass
         
     def _already_downloaded(self):
+        saved_req_path = os.path.join(self._dst_path, "data_requirement.json")
         # The configuration file was saved if the data was correctly downloaded
-        if not os.path.exists( os.path.join(self._dst_path, "data_requirement.json")):
-            if not os.path.exists(self._dst_path):
-                os.makedirs(self._dst_path)
+        if not os.path.exists(saved_req_path):
             dl = False
         else:
-            dl = True
+            # check content
+            with open(saved_req_path, 'r') as f:
+                saved_req = json.load(f)
+            if self._data_requirement_file == saved_req:
+                dl = True
+            else:
+                dl = False
             
         return dl
         
@@ -220,15 +225,16 @@ class Repo2DataChild():
         print()
         
         if not self._already_downloaded():
+            if not os.path.exists(self._dst_path):
+                os.makedirs(self._dst_path)
             # Downloading with the right method, depending on the src type
             self._scan_dl_type()
-            
             # If needed, decompression of the data
             self._archive_decompress()
             
             # Finally, we write the data_requirement.json in the output folder
             # to avoid redownloading the same data in the future if it exists
-            ###### Different behaviour if datalad update ???
+            #TODO: How to manage datalad update
             with open( os.path.join(self._dst_path, "data_requirement.json"), 'w') as fst:
                 json.dump(self._data_requirement_file, fst)
             
