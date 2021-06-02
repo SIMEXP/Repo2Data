@@ -1,10 +1,10 @@
 from setuptools import setup
 
 setup(name='repo2data',
-      version='2.3.1',
+      version='',
       description='Automatic data fetcher from a remote server.',
       url='https://github.com/SIMEXP/Repo2Data',
-      download_url='https://github.com/SIMEXP/Repo2Data/archive/2.3.1.tar.gz',
+      download_url='https://github.com/SIMEXP/Repo2Data/archive/.tar.gz',
       author='Loic TETREL',
       author_email='loic.tetrel.pro@gmail.com',
       license='MIT',
