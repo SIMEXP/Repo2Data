@@ -17,6 +17,7 @@ setup(name='repo2data',
           'datalad',
           'wget',
           'osfclient',
+          'gdown',
       ],
       include_package_data=True,
       zip_safe=False)

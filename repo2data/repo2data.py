@@ -154,6 +154,18 @@ class Repo2DataChild():
                 attempts = attempts + 1
                 print("Warning : Truncated data, retry %d ..." %(attempts))
                 pass
+
+    def _gdrive_download(self):
+        print("Info : Starting to download from Google drive %s ..." %(self._data_requirement_file["src"]))
+        try:
+            subprocess.check_call(['gdown'
+                                   , 'install'
+                                   , self._data_requirement_file["src"]
+                                   , "-O"
+                                   , self._dst_path])
+        except FileNotFoundError:
+            print("Error: gdown does not appear to be installed")
+            raise
     
     def _datalad_download(self):
         print("Info : Starting to download from datalad %s ..." %(self._data_requirement_file["src"]))
@@ -204,6 +216,7 @@ class Repo2DataChild():
         if ((re.match(".*?(https://).*?", self._data_requirement_file["src"])
                 or re.match(".*?(http://).*?", self._data_requirement_file["src"]))
                 and not re.match(".*?(\\.git)", self._data_requirement_file["src"])
+                and not re.match(".*?(drive\\.google\\.com)", self._data_requirement_file["src"])
                 and not re.match(".*?(https://osf.io).*?", self._data_requirement_file["src"])):
             self._wget_download()
         # if the source link has a .git, we use datalad

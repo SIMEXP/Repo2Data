@@ -4,3 +4,4 @@ datalad==0.12.4
 wget==3.2
 pytest==4.4.0
 osfclient==0.0.5
+gdown==3.13.0
