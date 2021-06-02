@@ -30,6 +30,10 @@ If this file is an archive, it will be automatically be decompressed using [pato
   "recursive": true}
 ```
 
+###### Google Drive
+
+https://drive.google.com/uc?id=1_zeJqQP8umrTk-evSAt3wCLxAkTKo0lC
+
 ###### library data-package
 
 You will need to put the script to import and download the data in the `src` field, the lib should be installed on the host machine.

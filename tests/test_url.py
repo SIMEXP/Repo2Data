@@ -19,4 +19,4 @@ class Test(unittest.TestCase):
         repo2data = Repo2Data("https://github.com/ltetrel/repo2data-caching-s3")
         repo2data.install()
         dirs = os.listdir(dir_path)
-        self.assertTrue(len(dirs) > 0)
+        self.assertTrue(len(dirs) > 1)

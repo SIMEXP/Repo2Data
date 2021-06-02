@@ -24,4 +24,7 @@ class Test(unittest.TestCase):
         repo2data = Repo2Data(data_req_path)
         repo2data.install()
         dirs = os.listdir(dir_path)
-        self.assertTrue(len(dirs) > 0)
+        self.assertTrue(len(dirs) > 1)
+
+t = Test()
+t.test_gdrive()
