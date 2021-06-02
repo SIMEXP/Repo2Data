@@ -3,6 +3,7 @@
 
 PACKAGE_NAME = $(shell python3 setup.py --name)
 PACKAGE_VERSION = $(shell python3 setup.py --version)
+VERSION = $(shell repo2data --version)
 
 default:
 	@echo "Makefile for $(PACKAGE_NAME) $(PACKAGE_VERSION)"
@@ -26,13 +27,11 @@ test:
 	@pytest
 
 publish:
-	@version=$(repo2data --version)
-	@sed -i "s~version='.*'~version='${version}'~" setup.py
-	@sed -i "s~/archive/.*\.tar~/archive/${version}\.tar~g" setup.py
-	@git commit setup.py repo2data/__init__.py -m "tagging version ${version}"
+	@$(MAKE) install
+	@git tag v${VERSION}
+	@git commit setup.py repo2data/__init__.py -m "Release v${VERSION}"
 	@git push origin && git push --tags origin
 	@python3 -m pip install twine wheel setuptools
-	@$(MAKE) install
 	@python3 -m twine upload dist/*
 	@$(MAKE) clean
 	@echo "Do not forget to create the release on github!"
