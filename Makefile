@@ -35,6 +35,7 @@ publish:
 	@$(MAKE) install
 	@python3 -m twine upload dist/*
 	@$(MAKE) clean
+	@echo "Do not forget to create the release on github!"
 
 clean:
 	@rm -Rf *.egg *.egg-info .cache .coverage .tox build dist docs/build htmlcov
