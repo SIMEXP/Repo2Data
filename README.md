@@ -32,7 +32,18 @@ If this file is an archive, it will be automatically be decompressed using [pato
 
 ###### Google Drive
 
-https://drive.google.com/uc?id=1_zeJqQP8umrTk-evSAt3wCLxAkTKo0lC
+It can also download a file from [Google Drive](https://www.google.com/intl/en_ca/drive/) using [gdown](https://github.com/wkentaro/gdown).
+You will need to make sure that your file is available for the public, and get the project ID (a chain of 33 characters that you can find on your public url).
+Then you can construct the url with this ID:
+`https://drive.google.com/uc?id=${PROJECT_ID}`
+
+For example:
+```
+{ "src": "ttps://drive.google.com/uc?id=1_zeJqQP8umrTk-evSAt3wCLxAkTKo0lC",
+  "dst": "./data",
+  "projectName": "repo2data_gdrive",
+  "recursive": true}
+```
 
 ###### library data-package
 
@@ -128,14 +139,6 @@ You can now install with `pip`:
 ```
 python3 -m pip install repo2data
 ```
-
-## Dependencies
-  
-* awscli==1.16.163
-* patool==1.12
-* datalad==0.12.4 (see pip install section)
-* wget==3.2
-* pytest==4.4.0
 
 ## Usage
 

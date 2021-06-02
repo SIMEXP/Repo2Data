@@ -1,0 +1,4 @@
+{ "src": "https://drive.google.com/uc?id=1_zeJqQP8umrTk-evSAt3wCLxAkTKo0lC",
+  "dst": "./tests/out/",
+  "projectName": "repo2data_gdrive",
+  "recursive": true}
