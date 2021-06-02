@@ -1,4 +1,5 @@
 tests/out/
+data/
 
 # Compiled python modules.
 *.pyc
