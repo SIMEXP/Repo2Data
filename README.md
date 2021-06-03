@@ -168,7 +168,7 @@ An example of a valid `GITHUB_REPO` is: https://github.com/ltetrel/repo2data-cac
 When you re-run Repo2Data with the same destination, it will automatically look for an existing `data_requirement.json` file in the downloaded folder.
 If the configured `data_requirement.json` is the same (i.e. the [JSON dict](https://www.w3schools.com/python/python_json.asp) has the same fields) then it will not re-download.
 
-To force the re-fetch (update existing files, add new files but keep the old files), you can add a new field in the `data_requirement.json`.
+To force the re-fetch (update existing files, add new files but keep the old files), you can add a new field or update an existing one in the `data_requirement.json`.
 For example replace:
 ```
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.zip",
@@ -182,6 +182,7 @@ by
   "projectName": "repo2data_out",
   "version": "1.1"}
 ```
+This is especially usefull when the provenance link always stay the same (osf, google drive...).
 
 ### disabling `dst` field
 
