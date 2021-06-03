@@ -106,7 +106,6 @@ class Repo2DataChild():
             try:
                 patoolib.extract_archive(os.path.join(self._dst_path, file)
                                         , outdir=self._dst_path
-                                        , verbosity=-1
                                         , interactive=False)
                 # now we can safely delete the archive
                 if os.path.exists(os.path.join(self._dst_path, file)):
@@ -158,10 +157,12 @@ class Repo2DataChild():
     def _gdrive_download(self):
         print("Info : Starting to download from Google drive %s ..." %(self._data_requirement_file["src"]))
         try:
+            # gdown does not allow to give output dir
+            cwd = os.getcwd()
+            os.chdir(self._dst_path)
             subprocess.check_call(['gdown'
-                                   , self._data_requirement_file["src"]
-                                   , "-O"
-                                   , self._dst_path])
+                                   , self._data_requirement_file["src"]])
+            os.chdir(cwd)
         except FileNotFoundError:
             print("Error: gdown does not appear to be installed")
             raise
