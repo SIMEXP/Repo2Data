@@ -253,6 +253,7 @@ class Repo2DataChild():
             #TODO: How to manage datalad update
             with open( os.path.join(self._dst_path, "data_requirement.json"), 'w') as fst:
                 json.dump(self._data_requirement_file, fst)
-            
         else:
             print('Info : %s already downloaded' %(self._dst_path))
+
+        return self._dst_path
