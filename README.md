@@ -39,7 +39,7 @@ Then you can construct the url with this ID:
 
 For example:
 ```
-{ "src": "ttps://drive.google.com/uc?id=1_zeJqQP8umrTk-evSAt3wCLxAkTKo0lC",
+{ "src": "https://drive.google.com/uc?id=1_zeJqQP8umrTk-evSAt3wCLxAkTKo0lC",
   "dst": "./data",
   "projectName": "repo2data_gdrive",
   "recursive": true}
@@ -162,6 +162,27 @@ repo2data -r GITHUB_REPO
 ```
 
 An example of a valid `GITHUB_REPO` is: https://github.com/ltetrel/repo2data-caching-s3
+
+### Trigger re-fetch
+
+When you re-run Repo2Data with the same destination, it will automatically look for an existing `data_requirement.json` file in the downloaded folder.
+If the configured `data_requirement.json` is the same (i.e. the [JSON dict](https://www.w3schools.com/python/python_json.asp) has the same fields) then it will not re-download.
+
+To force the re-fetch (update existing files, add new files but keep the old files), you can add a new field or update an existing one in the `data_requirement.json`.
+For example replace:
+```
+{ "src": "https://github.com/SIMEXP/Repo2Data/archive/master.zip",
+  "dst": "./data",
+  "projectName": "repo2data_out"}
+```
+by 
+```
+{ "src": "https://github.com/SIMEXP/Repo2Data/archive/master.zip",
+  "dst": "./data",
+  "projectName": "repo2data_out",
+  "version": "1.1"}
+```
+This is especially usefull when the provenance link always stay the same (osf, google drive...).
 
 ### disabling `dst` field
 

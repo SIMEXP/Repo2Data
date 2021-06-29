@@ -1,4 +1,4 @@
-# Makefile for the 'resuber' package.
+# Makefile for the 'repo2data' package.
 # inspired from https://github.com/xolox/python-humanfriendly/blob/master/Makefile
 
 PACKAGE_NAME = $(shell python3 setup.py --name)
