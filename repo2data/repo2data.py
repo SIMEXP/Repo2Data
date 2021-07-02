@@ -64,15 +64,17 @@ class Repo2Data():
         print("Config from file :")
         print(self._data_requirement_path)
         
+        ret = []
         #Here we check if the first item is a dict (mutiple requirement)
         if isinstance(self._data_requirement_file[ next(iter(self._data_requirement_file)) ], dict):
             for key, value in self._data_requirement_file.items():
                 if isinstance(value, dict):
-                    Repo2DataChild(value, self._use_server).install()
+                    ret += [Repo2DataChild(value, self._use_server).install()]
         #if not, it is a single assignment
         else:
-            Repo2DataChild(self._data_requirement_file, self._use_server).install()
-            
+            ret += [Repo2DataChild(self._data_requirement_file, self._use_server).install()]
+
+        return ret
         
 class Repo2DataChild():
     def __init__(self, data_requirement_file=None, use_server=False):
