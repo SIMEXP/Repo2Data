@@ -85,7 +85,7 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
 
 ###### osf
 
-`Repo2Data` uses [osclient](https://github.com/osfclient/osfclient) `osf -p PROJECT_ID clone` command. You will need to give the link to your project containing your data `https://osf.io/.../`:
+`Repo2Data` uses [osfclient](https://github.com/osfclient/osfclient) `osf -p PROJECT_ID clone` command. You will need to give the link to your project containing your data `https://osf.io/.../`:
 
 ```
 { "src": "https://osf.io/fuqsk/",
