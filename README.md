@@ -12,6 +12,12 @@ A `data_requirement.json` configuration file explaining what should be read, whe
   "projectName": "repo2data_out",
   "recursive": true}
 ```
+`src` is where you configure the upstream location for your data.
+
+`dst` specifies where (which folder) the data should be downloaded.
+
+`projectName` is the name of the directory where the data will be saved, such that you can access it at `{dst}/{projectName}`
+
 ## Output
 
 The content of the server inside the specified folder.
