@@ -93,6 +93,16 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
   "projectName": "repo2data_osf"}
 ```
 
+If you need to download a single file, or a list of files, you can do this using the `remote_filepath` field wich runs `osf -p PROJECT_ID fetch -f file`. For example to download two files (https://osf.io/aevrb/ and https://osf.io/bvuh6/), use a relative path to the root of the project:
+
+```
+{ "src": "https://osf.io/fuqsk/",
+  "remote_filepath": ["hello.txt", "test-subfolder/hello-from-subfolder.txt"],
+  "dst": "./data",
+  "projectName": "repo2data_osf_multiple"}
+```
+
+
 ###### multiple data
 
 If you need to download many data at once, you can create a list of json. For example, to download different files from a repo :
