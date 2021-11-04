@@ -4,13 +4,12 @@ Repo2Data is a **python3** package that automatically fetches data from a remote
  
 ## Input
  
-A `data_requirement.json` configuration file explaining what should be read, where should you store the data, a folder name and if you want to download in a recursive way.
+A `data_requirement.json` configuration file explaining what should be read, where should you store the data, and a project name (name of the folder where file will be downloaded).
 
 ```
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.zip",
   "dst": "./data",
-  "projectName": "repo2data_out",
-  "recursive": true}
+  "projectName": "repo2data_out"}
 ```
 ## Output
 
@@ -26,8 +25,7 @@ If this file is an archive, it will be automatically be decompressed using [pato
 ```
 { "src": "https://github.com/SIMEXP/Repo2Data/archive/master.tar.gz",
   "dst": "./data",
-  "projectName": "repo2data_wget",
-  "recursive": true}
+  "projectName": "repo2data_wget"}
 ```
 
 ###### Google Drive
@@ -41,8 +39,7 @@ For example:
 ```
 { "src": "https://drive.google.com/uc?id=1_zeJqQP8umrTk-evSAt3wCLxAkTKo0lC",
   "dst": "./data",
-  "projectName": "repo2data_gdrive",
-  "recursive": true}
+  "projectName": "repo2data_gdrive"}
 ```
 
 ###### library data-package
@@ -57,8 +54,7 @@ Repo2Data will then automatically replace `_dst` by the one provided in the `dst
 ```
 { "src": "import tensroflow as tf; tf.keras.datasets.mnist.load_data(path=_dst)",
   "dst": "./data",
-  "projectName": "repo2data_lib",
-  "recursive": true}
+  "projectName": "repo2data_lib"}
 ```
 
 ###### datalad
@@ -68,8 +64,7 @@ The `src` should be point to a `.git` link if using `datalad`, `Repo2Data` will 
 ```
 { "src": "https://github.com/OpenNeuroDatasets/ds000005.git",
   "dst": "./data",
-  "projectName": "repo2data_datalad",
-  "recursive": true}
+  "projectName": "repo2data_datalad"}
 ```
 
 ###### s3
@@ -79,8 +74,7 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
 ```
 { "src": "s3://openneuro.org/ds000005",
   "dst": "./data",
-  "projectName": "repo2data_s3",
-  "recursive": true}
+  "projectName": "repo2data_s3"}
 ```
 
 ###### osf
@@ -90,8 +84,7 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
 ```
 { "src": "https://osf.io/fuqsk/",
   "dst": "./data",
-  "projectName": "repo2data_osf",
-  "recursive": true}
+  "projectName": "repo2data_osf"}
 ```
 
 ###### multiple data
@@ -103,14 +96,12 @@ If you need to download many data at once, you can create a list of json. For ex
   "authors": {
     "src": "https://github.com/tensorflow/tensorflow/blob/master/AUTHORS",
     "dst": "./data",
-    "projectName": "repo2data_multiple1",
-    "recursive": true
+    "projectName": "repo2data_multiple1"
   },
   "license": {
     "src": "https://github.com/tensorflow/tensorflow/blob/master/LICENSE",
     "dst": "./data",
-    "projectName": "repo2data_multiple2",
-    "recursive": true
+    "projectName": "repo2data_multiple2"
   }
 }
 ```
