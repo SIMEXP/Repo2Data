@@ -33,7 +33,6 @@ publish:
 	@git push origin && git push --tags origin
 	@python3 -m pip install twine wheel setuptools
 	@python3 -m twine upload dist/*
-	@$(MAKE) clean
 	@echo "Do not forget to create the release on github!"
 
 clean:
