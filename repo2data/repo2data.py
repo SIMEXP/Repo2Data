@@ -95,7 +95,7 @@ class Repo2DataChild():
             print("Could not load json data.")
             raise
         
-        if(self._use_server):
+        if self._use_server:
             self._dst_path = os.path.join(self._server_dst_folder
                                         , self._data_requirement_file["projectName"])
         else:
@@ -204,11 +204,24 @@ class Repo2DataChild():
         print("Info : Starting to download from osf {} ...".format(self._data_requirement_file["src"]))
         try:
             project_id = re.match("https://osf.io/(.{5})", self._data_requirement_file["src"])[1]
-            subprocess.check_call(['osf'
-                                   , '--project'
-                                   , project_id
-                                   , 'clone'
-                                   , self._dst_path])
+            if not "remote_filepath" in self._data_requirement_file.keys():
+              subprocess.check_call(['osf'
+                                    , '--project'
+                                    , project_id
+                                    , 'clone'
+                                    , self._dst_path])
+            else:
+              remote_filepaths = self._data_requirement_file["remote_filepath"]
+              if not isinstance(remote_filepaths, list):
+                remote_filepaths = [remote_filepaths]
+              for remote_filepath in remote_filepaths:
+                subprocess.check_call(["osf"
+                                      , "--project"
+                                      , project_id
+                                      , "fetch"
+                                      , "-f"
+                                      , remote_filepath
+                                      , os.path.join(self._dst_path, remote_filepath)])
         except FileNotFoundError:
             print("Error: osf does not appear to be installed")
             raise
