@@ -25,7 +25,7 @@ The content of the server inside the specified folder.
 
 The tool can be executed through `bash` or imported as a python API.
 
-### Bash
+#### Bash
 
 If `data_requirement.json` is inside current directory, you can call the following on the command line:
 
@@ -33,7 +33,7 @@ If `data_requirement.json` is inside current directory, you can call the followi
 repo2data
 ```
 
-### Python API
+#### Python API
 
 After defining the `data_requirement.json` and importing the module, first instanciate the `Repo2Data` object with:
 
