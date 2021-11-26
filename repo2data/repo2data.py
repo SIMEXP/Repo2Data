@@ -81,7 +81,12 @@ class Repo2Data():
             self._set_data_requirement_path(data_requirement)
 
     def install(self):
-        """Launch child install process(es)"""
+        """Main method to install the dataset(s) by launching child process(es).
+
+            Returns
+            -------
+                `list` [string] : list of path(s) to the installed data directory(ies)
+        """
         print("---- repo2data starting ----")
         print(os.path.dirname(__file__))
         print("Config from file :")
@@ -288,7 +293,12 @@ class Repo2DataChild():
             self._osf_download()
 
     def install(self):
-        """Main method to install the dataset"""
+        """Main method to install the dataset.
+
+            Returns
+            -------
+                string : path to the installed data directory
+        """
         print("Destination:")
         print(self._dst_path)
         print()
