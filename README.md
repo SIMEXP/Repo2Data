@@ -46,7 +46,7 @@ data_req_path = os.path.join("data_requirement.json")
 repo2data = Repo2Data(data_req_path)
 ```
 
-You can then fetch the data with the `install` method, which returns the output directory where the data was downloaded:
+You can then fetch the data with the `install` method, which returns a list to the output directory(ies) where the data was downloaded:
 ```
 data_path = repo2data.install()
 ```
