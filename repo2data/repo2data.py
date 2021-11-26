@@ -14,78 +14,114 @@ import urllib
 import urllib.request
 import patoolib
 
+
 class Repo2Data():
+    """Repo2data mother class which get user (nested) requirement file and launch child processes"""
+
     def __init__(self, data_requirement=None, server=False):
+        """Initialize the Repo2Data mother class.
+            Parameters
+            ----------
+                data_requirement : string
+                    path to the data requirement file or github repository
+                server : bool
+                    whether to force output directory (default: False)
+        """
         self._data_requirement_path = None
         self._data_requirement_file = None
         self._use_server = server
-        
+
         self.load_data_requirement(data_requirement)
 
     def _set_data_requirement_path(self, data_requirement_path):
+        """Define path to the requirement file"""
         if data_requirement_path is None:
-            self._data_requirement_path = os.path.join(os.getcwd(), "data_requirement.json")
+            self._data_requirement_path = os.path.join(
+                os.getcwd(), "data_requirement.json")
         else:
             self._data_requirement_path = data_requirement_path
-        
+
         self._update_data_requirement_file()
-        
+
     def _update_data_requirement_file(self):
+        """Update data requirement if remote github url"""
         # Check if data_requirement is a github link
         if re.match(".*?(github\\.com).*?", self._data_requirement_path):
             try:
-                orga_repo = re.match(".*?github\\.com(/.*/.*)", self._data_requirement_path)[1]
-                raw_url = "https://raw.githubusercontent.com%s/HEAD/data_requirement.json" %(orga_repo)
+                orga_repo = re.match(
+                    ".*?github\\.com(/.*/.*)", self._data_requirement_path)[1]
+                raw_url = "https://raw.githubusercontent.com%s/HEAD/data_requirement.json" % (
+                    orga_repo)
                 with urllib.request.urlopen(raw_url) as url:
-                    self._data_requirement_file = json.loads(url.read().decode())
+                    self._data_requirement_file = json.loads(
+                        url.read().decode())
             # if requirement file is not in root repo, we check under binder directory
             except:
                 try:
-                    raw_url = "https://raw.githubusercontent.com%s/HEAD/binder/data_requirement.json" %(orga_repo)
+                    raw_url = "https://raw.githubusercontent.com%s/HEAD/binder/data_requirement.json" % (
+                        orga_repo)
                     with urllib.request.urlopen(raw_url) as url:
-                        self._data_requirement_file = json.loads(url.read().decode())
+                        self._data_requirement_file = json.loads(
+                            url.read().decode())
                 except:
-                    raise Exception("{} does not contain a data_requirement.json file!".format(self._data_requirement_path))
+                    raise Exception("{} does not contain a data_requirement.json file!".format(
+                        self._data_requirement_path))
         # else if it is indeed a req file
         elif re.match(".*?\\.json", self._data_requirement_path):
             with open(self._data_requirement_path, 'r') as fst:
                 self._data_requirement_file = json.load(fst)
         else:
-            raise Exception("{} is neither a valid url or filepath!".format(self._data_requirement_path))
-        
+            raise Exception("{} is neither a valid url or filepath!".format(
+                self._data_requirement_path))
+
     def load_data_requirement(self, data_requirement):
+        """Load data requirement file as json"""
         # we try if data_requirement is a str
         if isinstance(data_requirement, str) or data_requirement is None:
             self._set_data_requirement_path(data_requirement)
-            
+
     def install(self):
+        """Launch child install process(es)"""
         print("---- repo2data starting ----")
         print(os.path.dirname(__file__))
         print("Config from file :")
         print(self._data_requirement_path)
-        
+
         ret = []
-        #Here we check if the first item is a dict (mutiple requirement)
-        if isinstance(self._data_requirement_file[ next(iter(self._data_requirement_file)) ], dict):
+        # Here we check if the first item is a dict (mutiple requirement)
+        if isinstance(self._data_requirement_file[next(iter(self._data_requirement_file))], dict):
             for key, value in self._data_requirement_file.items():
                 if isinstance(value, dict):
                     ret += [Repo2DataChild(value, self._use_server).install()]
-        #if not, it is a single assignment
+        # if not, it is a single assignment
         else:
-            ret += [Repo2DataChild(self._data_requirement_file, self._use_server).install()]
+            ret += [Repo2DataChild(self._data_requirement_file,
+                                   self._use_server).install()]
 
         return ret
-        
+
+
 class Repo2DataChild():
+    """Repo2data child class which install the dataset"""
+
     def __init__(self, data_requirement_file=None, use_server=False):
+        """Initialize the Repo2Data child class.
+            Parameters
+            ----------
+                data_requirement_file : json
+                    un-nested requirement in json format
+                server : bool
+                    whether to force output directory (default: False)
+        """
         self._data_requirement_file = None
         self._dst_path = None
         self._use_server = use_server
         self._server_dst_folder = "./data"
-        
+
         self.load_data_requirement(data_requirement_file)
 
     def load_data_requirement(self, data_requirement_file):
+        """Load the json data requirement file and set destination folder"""
         # here we should load just a json data
         try:
             input = json.dumps(data_requirement_file)
@@ -94,37 +130,39 @@ class Repo2DataChild():
         except TypeError:
             print("Could not load json data.")
             raise
-        
+
         if self._use_server:
-            self._dst_path = os.path.join(self._server_dst_folder
-                                        , self._data_requirement_file["projectName"])
+            self._dst_path = os.path.join(
+                self._server_dst_folder, self._data_requirement_file["projectName"])
         else:
-            self._dst_path = os.path.join(self._data_requirement_file["dst"]
-                                        , self._data_requirement_file["projectName"])
-        
+            self._dst_path = os.path.join(
+                self._data_requirement_file["dst"], self._data_requirement_file["projectName"])
+
     def _archive_decompress(self):
+        """Uncompress the archive with patoolib library"""
         files = os.listdir(self._dst_path)
         for file in files:
             try:
-                patoolib.extract_archive(os.path.join(self._dst_path, file)
-                                        , outdir=self._dst_path
-                                        , interactive=False)
+                patoolib.extract_archive(os.path.join(
+                    self._dst_path, file), outdir=self._dst_path, interactive=False)
                 # now we can safely delete the archive
                 if os.path.exists(os.path.join(self._dst_path, file)):
                     os.remove(os.path.join(self._dst_path, file))
-                print("Info : %s Decompressed" %(file))
+                print("Info : %s Decompressed" % (file))
             except patoolib.util.PatoolError:
                 # we want to print the list of available formt JUST if the file is indeed an archive
                 try:
-                    patoolib.get_archive_format(os.path.join(self._dst_path, file))
-                    print("Info : %s is not compatible with patoolib " \
-                          ", bypassing decompression..." %(file))
+                    patoolib.get_archive_format(
+                        os.path.join(self._dst_path, file))
+                    print("Info : %s is not compatible with patoolib "
+                          ", bypassing decompression..." % (file))
                     list_formats = str(patoolib.list_formats())
                     print("Info: available archive formats :" + list_formats)
                 except patoolib.util.PatoolError:
                     pass
-        
+
     def _already_downloaded(self):
+        """Check if data was already downloaded"""
         saved_req_path = os.path.join(self._dst_path, "data_requirement.json")
         # The configuration file was saved if the data was correctly downloaded
         if not os.path.exists(saved_req_path):
@@ -137,96 +175,95 @@ class Repo2DataChild():
                 dl = True
             else:
                 dl = False
-            
+
         return dl
-        
+
     def _wget_download(self):
-        print("Info : Starting to download with wget %s ..." %(self._data_requirement_file["src"]))
+        """Install the data with wget library"""
+        print("Info : Starting to download with wget %s ..." %
+              (self._data_requirement_file["src"]))
         # Try it few times to avoid truncated data
         attempts = 0
         while attempts < 3:
-            #Download with standard weblink
+            # Download with standard weblink
             try:
-                wget.download(self._data_requirement_file["src"]
-                             , out=self._dst_path)
+                wget.download(
+                    self._data_requirement_file["src"], out=self._dst_path)
                 print(" ")
                 attempts = 999
             except urllib.error.ContentTooShortError:
                 attempts = attempts + 1
-                print("Warning : Truncated data, retry %d ..." %(attempts))
+                print("Warning : Truncated data, retry %d ..." % (attempts))
                 pass
 
     def _gdrive_download(self):
-        print("Info : Starting to download from Google drive %s ..." %(self._data_requirement_file["src"]))
+        """Install the data with google drive utility"""
+        print("Info : Starting to download from Google drive %s ..." %
+              (self._data_requirement_file["src"]))
         try:
             # gdown does not allow to give output dir
             cwd = os.getcwd()
             os.chdir(self._dst_path)
-            subprocess.check_call(['gdown'
-                                   , self._data_requirement_file["src"]])
+            subprocess.check_call(
+                ['gdown', self._data_requirement_file["src"]])
             os.chdir(cwd)
         except FileNotFoundError:
             print("Error: gdown does not appear to be installed")
             raise
-    
+
     def _datalad_download(self):
-        print("Info : Starting to download from datalad %s ..." %(self._data_requirement_file["src"]))
+        """Install the data with datalad software"""
+        print("Info : Starting to download from datalad %s ..." %
+              (self._data_requirement_file["src"]))
         try:
-            subprocess.check_call(['datalad'
-                                   , 'install'
-                                   , self._dst_path
-                                   , "-s"
-                                   , self._data_requirement_file["src"]])
+            subprocess.check_call(
+                ['datalad', 'install', self._dst_path, "-s", self._data_requirement_file["src"]])
         except FileNotFoundError:
             print("Error: datalad does not appear to be installed")
             raise
-            
+
     def _lib_download(self):
+        """Install the data with python library"""
         str_cmd = self._data_requirement_file["src"]
         str_cmd = str_cmd.replace("_dst", "\"" + self._dst_path + "\"")
-        print("Info : Starting to download from python lib %s ..." %(self._data_requirement_file["src"]))
+        print("Info : Starting to download from python lib %s ..." %
+              (self._data_requirement_file["src"]))
         subprocess.check_call(["python3", "-c", str_cmd])
-    
+
     def _s3_download(self):
-        print("Info : Starting to download from s3 %s ..." %(self._data_requirement_file["src"]))
+        """Install the data with amazon AWS s3 utility"""
+        print("Info : Starting to download from s3 %s ..." %
+              (self._data_requirement_file["src"]))
         try:
-            subprocess.check_call(['aws'
-                                   , 's3'
-                                   , 'sync'
-                                   , '--no-sign-request'
-                                   , self._data_requirement_file["src"]
-                                   , self._dst_path])
+            subprocess.check_call(['aws', 's3', 'sync', '--no-sign-request',
+                                  self._data_requirement_file["src"], self._dst_path])
         except FileNotFoundError:
             print("Error: aws does not appear to be installed")
             raise
 
     def _osf_download(self):
-        print("Info : Starting to download from osf {} ...".format(self._data_requirement_file["src"]))
+        """Install the data with OSF utility"""
+        print("Info : Starting to download from osf {} ...".format(
+            self._data_requirement_file["src"]))
         try:
-            project_id = re.match("https://osf.io/(.{5})", self._data_requirement_file["src"])[1]
+            project_id = re.match(
+                "https://osf.io/(.{5})", self._data_requirement_file["src"])[1]
             if not "remote_filepath" in self._data_requirement_file.keys():
-              subprocess.check_call(['osf'
-                                    , '--project'
-                                    , project_id
-                                    , 'clone'
-                                    , self._dst_path])
+                subprocess.check_call(
+                    ['osf', '--project', project_id, 'clone', self._dst_path])
             else:
-              remote_filepaths = self._data_requirement_file["remote_filepath"]
-              if not isinstance(remote_filepaths, list):
-                remote_filepaths = [remote_filepaths]
-              for remote_filepath in remote_filepaths:
-                subprocess.check_call(["osf"
-                                      , "--project"
-                                      , project_id
-                                      , "fetch"
-                                      , "-f"
-                                      , remote_filepath
-                                      , os.path.join(self._dst_path, remote_filepath)])
+                remote_filepaths = self._data_requirement_file["remote_filepath"]
+                if not isinstance(remote_filepaths, list):
+                    remote_filepaths = [remote_filepaths]
+                for remote_filepath in remote_filepaths:
+                    subprocess.check_call(["osf", "--project", project_id, "fetch", "-f",
+                                          remote_filepath, os.path.join(self._dst_path, remote_filepath)])
         except FileNotFoundError:
             print("Error: osf does not appear to be installed")
             raise
-    
+
     def _scan_dl_type(self):
+        """Detect which function to use for download"""
         # if it is an http link, then we use wget
         if ((re.match(".*?(https://).*?", self._data_requirement_file["src"])
                 or re.match(".*?(http://).*?", self._data_requirement_file["src"]))
@@ -240,7 +277,7 @@ class Repo2DataChild():
         # or coming from google drive
         elif re.match(".*?(drive\\.google\\.com).*?", self._data_requirement_file["src"]):
             self._gdrive_download()
-        #or maybe it is a python script
+        # or maybe it is a python script
         elif re.match(".*?(import.*?;).*?", self._data_requirement_file["src"]):
             self._lib_download()
         # or a s3 link ?
@@ -249,12 +286,13 @@ class Repo2DataChild():
         # or osf
         elif re.match(".*?(https://osf.io).*?", self._data_requirement_file["src"]):
             self._osf_download()
-    
+
     def install(self):
+        """Main method to install the dataset"""
         print("Destination:")
         print(self._dst_path)
         print()
-        
+
         if not self._already_downloaded():
             if not os.path.exists(self._dst_path):
                 os.makedirs(self._dst_path)
@@ -262,13 +300,13 @@ class Repo2DataChild():
             self._scan_dl_type()
             # If needed, decompression of the data
             self._archive_decompress()
-            
+
             # Finally, we write the data_requirement.json in the output folder
             # to avoid redownloading the same data in the future if it exists
-            #TODO: How to manage datalad update
-            with open( os.path.join(self._dst_path, "data_requirement.json"), 'w') as fst:
+            # TODO: How to manage datalad update
+            with open(os.path.join(self._dst_path, "data_requirement.json"), 'w') as fst:
                 json.dump(self._data_requirement_file, fst)
         else:
-            print('Info : %s already downloaded' %(self._dst_path))
+            print('Info : %s already downloaded' % (self._dst_path))
 
         return self._dst_path

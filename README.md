@@ -21,7 +21,37 @@ A `data_requirement.json` configuration file explaining what should be read, whe
 
 The content of the server inside the specified folder.
 
-### Examples of data_requirement.json
+## Execution
+
+The tool can be executed through `bash` or imported as a python API.
+
+### Bash
+
+If `data_requirement.json` is inside current directory, you can call the following on the command line:
+
+```
+repo2data
+```
+
+### Python API
+
+After defining the `data_requirement.json` and importing the module, first instanciate the `Repo2Data` object with:
+
+```
+from repo2data.repo2data import Repo2Data
+
+# define data requirement path
+data_req_path = os.path.join("data_requirement.json")
+# download data
+repo2data = Repo2Data(data_req_path)
+```
+
+You can then fetch the data with the `install` method, which returns the output directory where the data was downloaded:
+```
+data_path = repo2data.install()
+```
+
+## Examples of data_requirement.json
 
 ###### archive file
 
