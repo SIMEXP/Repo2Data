@@ -67,7 +67,7 @@ If this file is an archive, it will be automatically be decompressed using [pato
 ###### Google Drive
 
 It can also download a file from [Google Drive](https://www.google.com/intl/en_ca/drive/) using [gdown](https://github.com/wkentaro/gdown).
-You will need to make sure that your file is available for the public, and get the project ID (a chain of 33 characters that you can find on your public url).
+You will need to make sure that your file is available **publically**, and get the project ID (a chain of 33 characters that you can find on the url).
 Then you can construct the url with this ID:
 `https://drive.google.com/uc?id=${PROJECT_ID}`
 
@@ -115,7 +115,7 @@ To download an amazon s3 link, `Repo2Data` uses `aws s3 sync --no-sign-request` 
 
 ###### osf
 
-`Repo2Data` uses [osfclient](https://github.com/osfclient/osfclient) `osf -p PROJECT_ID clone` command. You will need to give the link to your project containing your data `https://osf.io/.../`:
+`Repo2Data` uses [osfclient](https://github.com/osfclient/osfclient) `osf -p PROJECT_ID clone` command. You will need to give the link to the **public** project containing your data `https://osf.io/.../`:
 
 ```
 { "src": "https://osf.io/fuqsk/",
