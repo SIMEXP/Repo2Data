@@ -221,8 +221,19 @@ by
 ```
 This is especially usefull when the provenance link always stay the same (osf, google drive...).
 
-### disabling `dst` field
+### make `dst` field optionnal
 
+##### using `dataLayout` field
+In the case you have a fixed known layout for the data folder within a github repository, the `dst` field is not needed anymore.
+To define what kind of layout you want, you can use the `dataLayout` field.
+For now we just support the [neurolibre layout](https://docs.neurolibre.org/en/latest/SUBMISSION_STRUCTURE.html#preprint-repository-structure):
+```
+{ "src": "https://github.com/SIMEXP/Repo2Data/archive/master.zip",
+  "dataLayout": "neurolibre"}
+```
+If you need another data layout (like [YODA](https://f1000research.com/posters/7-1965) or [cookiecutter-data-science](https://drivendata.github.io/cookiecutter-data-science/)) you can create a feature request.
+
+##### for administrator
 You can disable the field `dst` by using the option
 `repo2data --server`
 

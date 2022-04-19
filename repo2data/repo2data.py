@@ -97,11 +97,12 @@ class Repo2Data():
         if isinstance(self._data_requirement_file[next(iter(self._data_requirement_file))], dict):
             for key, value in self._data_requirement_file.items():
                 if isinstance(value, dict):
-                    ret += [Repo2DataChild(value, self._use_server).install()]
+                    ret += [Repo2DataChild(value, self._use_server,
+                                           self._data_requirement_path).install()]
         # if not, it is a single assignment
         else:
             ret += [Repo2DataChild(self._data_requirement_file,
-                                   self._use_server).install()]
+                                   self._use_server, self._data_requirement_path).install()]
 
         return ret
 
@@ -109,7 +110,7 @@ class Repo2Data():
 class Repo2DataChild():
     """Repo2data child class which install the dataset"""
 
-    def __init__(self, data_requirement_file=None, use_server=False):
+    def __init__(self, data_requirement_file=None, use_server=False, data_requirement_path=None):
         """Initialize the Repo2Data child class.
             Parameters
             ----------
@@ -121,6 +122,7 @@ class Repo2DataChild():
         self._data_requirement_file = None
         self._dst_path = None
         self._use_server = use_server
+        self._data_requirement_path = data_requirement_path
         self._server_dst_folder = "./data"
 
         self.load_data_requirement(data_requirement_file)
@@ -140,8 +142,16 @@ class Repo2DataChild():
             self._dst_path = os.path.join(
                 self._server_dst_folder, self._data_requirement_file["projectName"])
         else:
-            self._dst_path = os.path.join(
-                self._data_requirement_file["dst"], self._data_requirement_file["projectName"])
+            if ("dataLayout" in self._data_requirement_file.keys()) & (self._data_requirement_path is not None):
+                if os.path.exists(self._data_requirement_path):
+                    # data layout for neurolibre
+                    if self._data_requirement_file['dataLayout'] == "neurolibre":
+                        data_req_dir = os.path.dirname(self._data_requirement_path)
+                        self._dst_path = os.path.join(os.path.realpath(
+                            os.path.join(data_req_dir, "..", "data")), self._data_requirement_file["projectName"])
+            else:
+                self._dst_path = os.path.join(
+                    self._data_requirement_file["dst"], self._data_requirement_file["projectName"])
 
     def _archive_decompress(self):
         """Uncompress the archive with patoolib library"""
