@@ -1,5 +1,6 @@
 tests/out/
 data/
+tests/in/neurolibre/data
 
 # Compiled python modules.
 *.pyc
