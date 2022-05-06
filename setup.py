@@ -19,6 +19,7 @@ setup(name='repo2data',
           'wget',
           'osfclient',
           'gdown',
+          'zenodo-get'
       ],
       include_package_data=True,
       zip_safe=False)
