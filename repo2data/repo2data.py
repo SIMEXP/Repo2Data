@@ -247,7 +247,7 @@ class Repo2DataChild():
         subprocess.check_call(["python3", "-c", str_cmd])
 
     def _zenodo_download(self):
-        """Install the data with amazon AWS s3 utility"""
+        """Install the data with zenodo_get utility"""
         print("Info : Starting to download from zenodo %s ..." %
               (self._data_requirement_file["src"]))
         try:
@@ -310,6 +310,9 @@ class Repo2DataChild():
         # or a s3 link ?
         elif re.match(".*?(s3://).*?", self._data_requirement_file["src"]):
             self._s3_download()
+        # or from zenodo ?
+        elif re.match(".*?(10\.\d{4}/zenodo).*?", self._data_requirement_file["src"]):
+            self._zenodo_download()
         # or osf
         elif re.match(".*?(https://osf.io).*?", self._data_requirement_file["src"]):
             self._osf_download()
