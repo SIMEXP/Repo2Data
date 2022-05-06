@@ -5,3 +5,4 @@ wget==3.2
 pytest==6.2.0
 osfclient==0.0.5
 gdown==4.2.0
+zenodo-get==1.3.4

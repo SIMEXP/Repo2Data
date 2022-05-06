@@ -132,6 +132,15 @@ If you need to download a single file, or a list of files, you can do this using
   "projectName": "repo2data_osf_multiple"}
 ```
 
+###### zenodo
+
+The public data repository [zenodo](https://zenodo.org/) is also supported using [zenodo_get](https://gitlab.com/dvolgyes/zenodo_get). Make sure your project is public and it has a DOI with the form `10.5281/zenodo.XXXXXXX`:
+
+```
+{ "src": "10.5281/zenodo.6482995",
+  "dst": "./data",
+  "projectName": "repo2data_zenodo"}
+```
 
 ###### multiple data
 

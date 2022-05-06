@@ -146,7 +146,8 @@ class Repo2DataChild():
                 if os.path.exists(self._data_requirement_path):
                     # data layout for neurolibre
                     if self._data_requirement_file['dataLayout'] == "neurolibre":
-                        data_req_dir = os.path.dirname(self._data_requirement_path)
+                        data_req_dir = os.path.dirname(
+                            self._data_requirement_path)
                         self._dst_path = os.path.join(os.path.realpath(
                             os.path.join(data_req_dir, "..", "data")), self._data_requirement_file["projectName"])
             else:
@@ -244,6 +245,17 @@ class Repo2DataChild():
         print("Info : Starting to download from python lib %s ..." %
               (self._data_requirement_file["src"]))
         subprocess.check_call(["python3", "-c", str_cmd])
+
+    def _zenodo_download(self):
+        """Install the data with amazon AWS s3 utility"""
+        print("Info : Starting to download from zenodo %s ..." %
+              (self._data_requirement_file["src"]))
+        try:
+            subprocess.check_call(
+                ['zenodo_get', '-o', self._dst_path, self._data_requirement_file["src"]])
+        except FileNotFoundError:
+            print("Error: zenodo_get does not appear to be installed")
+            raise
 
     def _s3_download(self):
         """Install the data with amazon AWS s3 utility"""
