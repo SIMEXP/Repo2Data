@@ -250,7 +250,7 @@ In this case `Repo2Data` will put the data inside the folder `./data` from where
 
 ### Docker
 
-You will need to create a folder on your machine (containing a `data_requirement.json`) that the Docker container will access so `Repo2Data` can pull the data inside it, after you can use:
+You will need to create a folder on your machine (containing a `data_requirement.json`) that the [Docker container](https://www.scaler.com/topics/what-is-docker/) will access so `Repo2Data` can pull the data inside it, after you can use:
 ```
 sudo docker run -v /PATH/TO/FOLDER:/data repo2data
 ```
