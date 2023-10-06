@@ -7,12 +7,13 @@ Created on Fri Dec 21 11:55:12 2018
 """
 import os
 import json
-import wget
+import requests
 import subprocess
 import re
 import urllib
 import urllib.request
 import patoolib
+import time
 
 
 class Repo2Data():
@@ -194,23 +195,39 @@ class Repo2DataChild():
 
         return dl
 
-    def _wget_download(self):
-        """Install the data with wget library"""
-        print("Info : Starting to download with wget %s ..." %
-              (self._data_requirement_file["src"]))
-        # Try it few times to avoid truncated data
-        attempts = 0
-        while attempts < 3:
-            # Download with standard weblink
-            try:
-                wget.download(
-                    self._data_requirement_file["src"], out=self._dst_path)
-                print(" ")
-                attempts = 999
-            except urllib.error.ContentTooShortError:
-                attempts = attempts + 1
-                print("Warning : Truncated data, retry %d ..." % (attempts))
-                pass
+    def _url_download(self):
+        """
+        Under the assumption that the download link points to 
+        a single tar/zip etc file, use requests library to 
+        downlad the data to a relative path.
+        """
+        url = self._data_requirement_file["src"]
+        directory = self._dst_path
+        max_retries = 3
+        retry_delay = 5
+        for retry in range(max_retries):
+                response = requests.get(url, stream=True)
+                if response.status_code == 200:
+                    # Create the directory if it doesn't exist
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+                    # Get the filename from the URL
+                    filename = url.split('/')[-1]
+                    # Path to save the file
+                    filepath = os.path.join(directory, filename)
+                    # Save the content of the response to a file
+                    with open(filepath, 'wb') as file:
+                        for chunk in response.iter_content(chunk_size=128):
+                            file.write(chunk)
+                    print(f'File downloaded to: {filepath}')
+                    return filepath
+                else:
+                    print(f'Attempt {retry + 1} - Failed to download the file. Status code: {response.status_code}')
+                    if retry < max_retries - 1:
+                        print(f'Retrying in {retry_delay} seconds...')
+                        time.sleep(retry_delay)
+        # If hits here means retries failed.
+        print('Download failed after multiple attempts.')
 
     def _gdrive_download(self):
         """Install the data with google drive utility"""
@@ -291,13 +308,14 @@ class Repo2DataChild():
 
     def _scan_dl_type(self):
         """Detect which function to use for download"""
-        # if it is an http link, then we use wget
+        # If an http link is provided or the url does not match one of the providers
+        # (osf, google, datalad, git), then fall back to requests to download the file.
         if ((re.match(".*?(https://).*?", self._data_requirement_file["src"])
                 or re.match(".*?(http://).*?", self._data_requirement_file["src"]))
                 and not re.match(".*?(\\.git)", self._data_requirement_file["src"])
                 and not re.match(".*?(drive\\.google\\.com).*?", self._data_requirement_file["src"])
                 and not re.match(".*?(https://osf\\.io).*?", self._data_requirement_file["src"])):
-            self._wget_download()
+            self._url_download()
         # if the source link has a .git, we use datalad
         elif re.match(".*?(\\.git)", self._data_requirement_file["src"]):
             self._datalad_download()
