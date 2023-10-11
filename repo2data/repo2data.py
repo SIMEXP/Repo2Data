@@ -99,7 +99,7 @@ class Repo2Data():
             for key, value in self._data_requirement_file.items():
                 if isinstance(value, dict):
                     ret += [Repo2DataChild(value, self._use_server,
-                                           self._data_requirement_path).install()]
+                                           self._data_requirement_path,key).install()]
         # if not, it is a single assignment
         else:
             ret += [Repo2DataChild(self._data_requirement_file,
@@ -111,7 +111,7 @@ class Repo2Data():
 class Repo2DataChild():
     """Repo2data child class which install the dataset"""
 
-    def __init__(self, data_requirement_file=None, use_server=False, data_requirement_path=None):
+    def __init__(self, data_requirement_file=None, use_server=False, data_requirement_path=None, download_key = None):
         """Initialize the Repo2Data child class.
             Parameters
             ----------
@@ -125,6 +125,11 @@ class Repo2DataChild():
         self._use_server = use_server
         self._data_requirement_path = data_requirement_path
         self._server_dst_folder = "./data"
+        self._download_key = download_key
+        if self._download_key:
+            self._cache_record = f"{self._download_key}_repo2data_cache_record.json"
+        else: 
+            self._cache_record = f"repo2data_cache_record.json"
 
         self.load_data_requirement(data_requirement_file)
 
@@ -180,20 +185,22 @@ class Repo2DataChild():
 
     def _already_downloaded(self):
         """Check if data was already downloaded"""
-        saved_req_path = os.path.join(self._dst_path, "data_requirement.json")
+        cache_rec_path = os.path.join(self._dst_path, self._cache_record)
         # The configuration file was saved if the data was correctly downloaded
-        if not os.path.exists(saved_req_path):
-            dl = False
+        if not os.path.exists(cache_rec_path):
+            is_downloaded = False
         else:
             # check content
-            with open(saved_req_path, 'r') as f:
-                saved_req = json.load(f)
-            if self._data_requirement_file == saved_req:
-                dl = True
+            with open(cache_rec_path, 'r') as f:
+                cache_rec = json.load(f)
+            # If the cache record file is identical to 
+            # the current data requirement file, assume that
+            # the cached data exists.
+            if self._data_requirement_file == cache_rec:
+                is_downloaded = True
             else:
-                dl = False
-
-        return dl
+                is_downloaded = False
+        return is_downloaded
 
     def _url_download(self):
         """
@@ -354,10 +361,8 @@ class Repo2DataChild():
             # If needed, decompression of the data
             self._archive_decompress()
 
-            # Finally, we write the data_requirement.json in the output folder
-            # to avoid redownloading the same data in the future if it exists
             # TODO: How to manage datalad update
-            with open(os.path.join(self._dst_path, "data_requirement.json"), 'w') as fst:
+            with open(os.path.join(self._dst_path, self._cache_record), 'w') as fst:
                 json.dump(self._data_requirement_file, fst)
         else:
             print('Info : %s already downloaded' % (self._dst_path))
