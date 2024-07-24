@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repo2data"
+dynamic = ["version"]
+description = "A Python package to automate the fetching and extraction of data from remote sources like Amazon S3, Zeonodo, Datalad, Google Drive, OSF, or any public download URL."
+authors = [
+    { name="ltetrel", email="roboneurolibre@gmail.com" },
+    { name="agahkarakuzu", email="agahkarakuzu@gmail.com" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.7"
+keywords = ["neurolibre", "open-data", "reproducible", "osf", "zenodo","datalad","conp","gdown","aws"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    'awscli',
+    'patool',
+    'datalad',
+    'requests',
+    'osfclient',
+    'gdown',
+    'zenodo-get',
+    'requests'
+]
+
+[project.scripts]
+repo2data =  "bin/repo2data:main"
+
+[project.urls]
+Homepage = "https://github.com/SIMEXP/Repo2Data"
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "dirty-tag"

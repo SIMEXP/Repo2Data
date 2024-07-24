@@ -1,0 +1,32 @@
+name: publish
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  pypi-publish:
+    name: upload release to PyPI
+    runs-on: ubuntu-latest
+    # Specifying a GitHub environment is optional, but strongly encouraged
+    environment: release
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.4'
+          cache: pip
+          cache-dependency-path: '**/pyproject.toml'
+      - name: Install dependencies
+        run: |
+          pip install setuptools wheel build twine setuptools_scm
+      - name: Build
+        run: |
+          python -m build
+      # retrieve your distributions here
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
