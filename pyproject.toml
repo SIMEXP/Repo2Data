@@ -31,7 +31,7 @@ dependencies = [
 ]
 
 [project.scripts]
-repo2data =  "bin/repo2data:main"
+repo2data =  "repo2data.bin.repo2data:main"
 
 [project.urls]
 Homepage = "https://github.com/SIMEXP/Repo2Data"
