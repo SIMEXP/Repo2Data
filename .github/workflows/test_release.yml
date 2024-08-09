@@ -1,5 +1,9 @@
-name: Publish Python 🐍 distribution to TestPyPI
-on: push
+name: Publish TestPyPI
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
   pypi-test-publish:

@@ -31,8 +31,12 @@ class Repo2Data():
         self._data_requirement_path = None
         self._data_requirement_file = None
         self._use_server = server
+        self._server_dst_folder = "./data"
 
         self.load_data_requirement(data_requirement)
+
+    def set_server_dst_folder(self,directory):
+        self._server_dst_folder = directory
 
     def _set_data_requirement_path(self, data_requirement_path):
         """Define path to the requirement file"""
@@ -99,11 +103,11 @@ class Repo2Data():
             for key, value in self._data_requirement_file.items():
                 if isinstance(value, dict):
                     ret += [Repo2DataChild(value, self._use_server,
-                                           self._data_requirement_path,key).install()]
+                                           self._data_requirement_path,key,self._server_dst_folder).install()]
         # if not, it is a single assignment
         else:
             ret += [Repo2DataChild(self._data_requirement_file,
-                                   self._use_server, self._data_requirement_path).install()]
+                                   self._use_server, self._data_requirement_path, None, self._server_dst_folder).install()]
 
         return ret
 
@@ -111,7 +115,7 @@ class Repo2Data():
 class Repo2DataChild():
     """Repo2data child class which install the dataset"""
 
-    def __init__(self, data_requirement_file=None, use_server=False, data_requirement_path=None, download_key = None):
+    def __init__(self, data_requirement_file=None, use_server=False, data_requirement_path=None, download_key = None, server_dst_folder=None):
         """Initialize the Repo2Data child class.
             Parameters
             ----------
@@ -124,7 +128,7 @@ class Repo2DataChild():
         self._dst_path = None
         self._use_server = use_server
         self._data_requirement_path = data_requirement_path
-        self._server_dst_folder = "./data"
+        self._server_dst_folder = server_dst_folder
         self._download_key = download_key
         if self._download_key:
             self._cache_record = f"{self._download_key}_repo2data_cache_record.json"
@@ -132,9 +136,6 @@ class Repo2DataChild():
             self._cache_record = f"repo2data_cache_record.json"
 
         self.load_data_requirement(data_requirement_file)
-
-    def set_server_dst_folder(self,directory):
-        self._server_dst_folder = directory
 
     def load_data_requirement(self, data_requirement_file):
         """Load the json data requirement file and set destination folder"""

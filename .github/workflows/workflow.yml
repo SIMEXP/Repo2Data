@@ -1,12 +1,15 @@
 name: publish
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+
+on: 
+  workflow_run:
+    workflows: ['Publish TestPyPI']
+    types:
+      - completed
 
 jobs:
   pypi-publish:
     name: upload release to PyPI
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     # Specifying a GitHub environment is optional, but strongly encouraged
     environment: release
