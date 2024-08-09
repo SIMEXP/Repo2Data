@@ -133,6 +133,9 @@ class Repo2DataChild():
 
         self.load_data_requirement(data_requirement_file)
 
+    def set_server_dst_folder(self,directory):
+        self._server_dst_folder = directory
+
     def load_data_requirement(self, data_requirement_file):
         """Load the json data requirement file and set destination folder"""
         # here we should load just a json data

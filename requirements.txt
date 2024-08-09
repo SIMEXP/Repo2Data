@@ -1,7 +1,6 @@
 awscli==1.21.0
 patool==1.12
 datalad==0.15.0
-wget==3.2
 pytest==6.2.0
 osfclient==0.0.5
 gdown==4.2.0
