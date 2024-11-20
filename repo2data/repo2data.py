@@ -323,12 +323,12 @@ class Repo2DataChild():
         # (osf, google, datalad, git), then fall back to requests to download the file.
         if ((re.match(".*?(https://).*?", self._data_requirement_file["src"])
                 or re.match(".*?(http://).*?", self._data_requirement_file["src"]))
-                and not re.match(".*?(\\.git)", self._data_requirement_file["src"])
+                and not re.match(".*?\\.git$", self._data_requirement_file["src"])
                 and not re.match(".*?(drive\\.google\\.com).*?", self._data_requirement_file["src"])
                 and not re.match(".*?(https://osf\\.io).*?", self._data_requirement_file["src"])):
             self._url_download()
         # if the source link has a .git, we use datalad
-        elif re.match(".*?(\\.git)", self._data_requirement_file["src"]):
+        elif re.match(".*?\\.git$", self._data_requirement_file["src"]):
             self._datalad_download()
         # or coming from google drive
         elif re.match(".*?(drive\\.google\\.com).*?", self._data_requirement_file["src"]):
