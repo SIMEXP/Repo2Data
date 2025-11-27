@@ -21,13 +21,12 @@ classifiers = [
 ]
 dependencies = [
     'awscli',
-    'patool',
     'datalad',
-    'requests',
-    'osfclient',
     'gdown',
+    'osfclient',
+    'patool',
+    'requests',
     'zenodo-get',
-    'requests'
 ]
 
 [project.scripts]
