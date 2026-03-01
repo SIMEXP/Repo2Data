@@ -1,4 +1,4 @@
-awscli==1.21.0
+awscli==1.44.38
 patool==1.12
 datalad==0.15.0
 pytest==6.2.0
